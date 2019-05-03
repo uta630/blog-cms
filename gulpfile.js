@@ -33,7 +33,8 @@ const pngquant = require('imagemin-pngquant');
 const mozjpeg = require('imagemin-mozjpeg');
 
 // require : ローカルサーバー
-const browserSync = require('browser-sync').create();
+const browserSync = require('browser-sync');
+const connect = require('gulp-connect-php');
 
 // task : scss
 gulp.task('scss', function() {
@@ -113,21 +114,24 @@ gulp.task('minjs', function() {
     .pipe(gulp.dest('dist/js/'));
 });
 
-// ローカルサーバーの立ち上げ
-// https://teratail.com/questions/168814
-const browserSyncOption = {
-  server: {
-    baseDir: './dist/'
-  },
-  reloadOnRestart: true
-};
+gulp.task('server', function() {
+  connect.server({
+    port: 8001,
+    base: 'dist'
+  }, function (){
+    browserSync({
+      proxy: 'localhost:8001'
+    });
+  });
+  
+  const browserReload = () => {
+    browserSync.reload();
+  };
+  gulp.watch('src/scss/**/*.scss').on('change', gulp.series('scss', 'css', 'imagemin', browserReload));
+  gulp.watch('src/**/*.ejs').on('change', gulp.series('ejs', 'imagemin', browserReload));
+  gulp.watch('src/**/*.js').on('change', gulp.series('webpack', 'minjs', 'imagemin', browserReload));
+});
 
-function sync(done) {
-  browserSync.init(browserSyncOption);
-  done();
-}
-
-// watch&リロード 処理
 function watchFiles(done) {
   const browserReload = () => {
     browserSync.reload();
@@ -144,5 +148,5 @@ gulp.task('default',
     'ejs',
     'webpack', 'minjs',
     'imagemin',
-    sync, watchFiles)
+    'server')
 );
