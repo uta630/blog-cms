@@ -116,8 +116,7 @@ gulp.task('minjs', function() {
 
 gulp.task('connect-sync', function() {
   connect.server({
-    base: './dist/',
-    debug: true
+    base: './dist/'
   }, function (){
     browserSync({
       proxy: 'localhost:8000'
