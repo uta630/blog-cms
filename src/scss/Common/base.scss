@@ -11,10 +11,12 @@ h1 {
 
 img {
     width: 100%;
+
+    vertical-align: bottom;
 }
 
 a {
-    color: $primary-color;
+    color: $green;
     
     &:hover {
         text-decoration: none;

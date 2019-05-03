@@ -1,13 +1,23 @@
-/* color */
+/* color : main */
 $primary-color: #009788;
 $secondary-color: #07c1af;
+/* color : three colors */
+$green: #51c688;
+$blue: #0099ff;
+$red: #c75656;
+$light-green: lighten($green, 10%);
+$light-blue: lighten($blue, 10%);
+$light-red: lighten($red, 10%);
+$dark-green: darken($green, 10%);
+$dark-blue: darken($blue, 10%);
+$dark-red: darken($red, 10%);
+/* color : dark colors */
+$gray: #717171;
+$light-gray: #f7f7f7;
+$dark-gray: #333;
 
 $black: #000;
 $white: #fff;
-
-$light-gray: #f7f7f7;
-$gray: #717171;
-$dark-gray: #333;
 
 /* size */
 $sidebar-width: 240px;

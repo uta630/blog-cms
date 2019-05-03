@@ -1,5 +1,27 @@
 <?php include('./common/head.php'); ?>
 
-<?php include('./common/common.php'); ?>
+<div class="c-admin-wrap">
+    <div class="c-admin">
+        <h2 class="c-admin__title">退会</h2>
+
+        <form method="post" class="c-form">
+            <label for="name" class="c-form__label">
+                名前
+                <input type="text" name="name" id="name" class="c-form__input">
+            </label>
+
+            <label for="password" class="c-form__label">
+                パスワード
+                <input type="password" name="pass" id="password" class="c-form__input">
+            </label>
+
+            <p class="c-form__text c-form__text--alert">※アカウントを削除するとコンテンツは使用できなくなります。</p>
+
+            <input type="submit" value="退会する" class="c-form__submit c-btn c-btn--red">
+
+            <a href="/admin/mypage.php" class="c-btn">戻る</a>
+        </form>
+    </div>
+</div>
 
 <?php include('./common/footer.php'); ?>

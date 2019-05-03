@@ -102,3 +102,27 @@
 .c-copyright {
     font-size: 14px;
 }
+
+// mypage
+.c-admin {
+    &-wrap {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+
+        min-height: 100vh;
+    }
+
+    background: $white;
+    max-width: 640px;
+
+    padding: 6% 4%;
+
+    &__title {
+        width: 100%;
+        
+        line-height: 1.6;
+        text-align: center;
+        font-size: 20px;
+    }
+}

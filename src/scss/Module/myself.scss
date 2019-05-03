@@ -1,0 +1,25 @@
+.c-myself {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+
+    flex-wrap: wrap;
+
+    margin: 24px 0;
+
+    &__image {
+        flex-basis: 30%;
+    }
+
+    &__thumb {}
+
+    &__contents {
+        flex-basis: 60%;
+
+        line-height: 2;
+    }
+
+    &__link {
+        margin: 12px auto;
+    }
+}

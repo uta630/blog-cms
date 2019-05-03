@@ -1,5 +1,22 @@
 <?php include('./common/head.php'); ?>
 
-<?php include('./common/common.php'); ?>
+<div class="c-admin-wrap">
+    <div class="c-admin">
+        <h2 class="c-admin__title">パスワードをお忘れの方</h2>
+
+        <form method="post" class="c-form">
+            <label for="old_pass" class="c-form__label">
+                メールアドレス
+                <input type="password" name="old_pass" id="old_pass" class="c-form__input">
+            </label>
+
+            <p class="c-form__text">※入力いただいたメールアドレスへ再登録用のパスワードを発行してお送りします。お手数ですがメールをご確認の上、パスワードを再設定してください。</p>
+
+            <input type="submit" value="送信" class="c-form__submit c-btn c-btn--blue">
+
+            <a href="/admin/changepass.php" class="c-btn">戻る</a>
+        </form>
+    </div>
+</div>
 
 <?php include('./common/footer.php'); ?>
