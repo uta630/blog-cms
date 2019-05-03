@@ -1,0 +1,18 @@
+.c-post {
+    &__heading {}
+    &__title {}
+    &__date {}
+    &__category {}
+
+    &__contents {}
+    &__text {}
+    &__more {}
+
+    &__images {}
+    &__thumb {}
+    
+    &__icon {
+        &--prev {}
+        &--next {}
+    }
+}

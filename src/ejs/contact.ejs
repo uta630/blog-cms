@@ -1,5 +1,31 @@
 <?php include('./common/head.php'); ?>
 
-<?php include('./common/gnav.php'); ?>
+<h1>SITE TITLE</h1>
+
+<div class="c-primary c-form">
+    <form method="post" class="c-form">
+        <label for="name" class="c-form__input">
+            <p class="c-form__title">名前</p>
+            <input type="text" name="name" id="name" class="c-form__input c-input">
+        </label>
+        
+        <label for="email" class="c-form__input">
+            <p class="c-form__title">メールアドレス</p>
+            <input type="text" name="email" id="email" class="c-form__input c-input">
+        </label>
+
+        <label for="subject" class="c-form__input">
+            <p class="c-form__title">件名</p>
+            <input type="text" name="subject" id="subject" class="c-form__input c-input">
+        </label>
+
+        <label for="comment" class="c-form__input">
+            <p class="c-form__title">本文</p>
+            <textarea name="comment" id="comment" class="c-form__input c-input"></textarea>
+        </label>
+    </form>
+</div>
+
+<?php include('./common/sidebar.php'); ?>
 
 <?php include('./common/footer.php'); ?>
