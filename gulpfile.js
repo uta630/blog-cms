@@ -114,13 +114,13 @@ gulp.task('minjs', function() {
     .pipe(gulp.dest('dist/js/'));
 });
 
-gulp.task('server', function() {
+gulp.task('connect-sync', function() {
   connect.server({
-    port: 8001,
-    base: 'dist'
+    base: './dist/',
+    debug: true
   }, function (){
     browserSync({
-      proxy: 'localhost:8001'
+      proxy: 'localhost:8000'
     });
   });
   
@@ -132,21 +132,11 @@ gulp.task('server', function() {
   gulp.watch('src/**/*.js').on('change', gulp.series('webpack', 'minjs', 'imagemin', browserReload));
 });
 
-function watchFiles(done) {
-  const browserReload = () => {
-    browserSync.reload();
-    done();
-  };
-  gulp.watch('src/scss/**/*.scss').on('change', gulp.series('scss', 'css', 'imagemin', browserReload));
-  gulp.watch('src/**/*.ejs').on('change', gulp.series('ejs', 'imagemin', browserReload));
-  gulp.watch('src/**/*.js').on('change', gulp.series('webpack', 'minjs', 'imagemin', browserReload));
-}
-
 gulp.task('default',
   gulp.series(
     'scss', 'css',
     'ejs',
     'webpack', 'minjs',
     'imagemin',
-    'server')
+    'connect-sync')
 );
