@@ -1,18 +1,86 @@
 .c-post {
-    &__heading {}
-    &__title {}
-    &__date {}
-    &__category {}
+    background: $white;
+
+    margin-bottom: 1em;
+    padding: 32px;
+
+    &__heading {
+        margin-bottom: 1em;
+
+        line-height: 1.6;
+        
+        border-bottom: 1px solid $dark-gray;
+    }
+
+    &__title {
+        color: $primary-color;
+        font-size: 24px;
+        font-weight:  bold;
+    }
+
+    &__date {
+        font-size: 14px;
+    }
+
+    &__category {
+        background: $secondary-color;
+
+        padding: 4px 8px;
+
+        color: $white;
+        font-size: 12px;
+
+        border-radius: 6px;
+    }
 
     &__contents {}
-    &__text {}
+    &__text {
+        line-height: 1.4;
+        font-size: 16px;
+    }
     &__more {}
 
-    &__images {}
+    &__images {
+        position: relative;
+        margin-bottom: 14px;
+    }
+
     &__thumb {}
     
     &__icon {
-        &--prev {}
-        &--next {}
+        display: block;
+
+        position: absolute;
+        top: 0;
+        bottom: 0;
+
+        width: 14px;
+        height: 14px;
+
+        margin: auto;
+
+        cursor: pointer;
+        
+        &::before {
+            content: '';
+
+            display: block;
+
+            width: 100%;
+            height: 100%;
+
+            border: solid $white;
+            border-width: 3px 3px 0 0;
+            border-radius: 2px;
+        }
+        
+        &--prev {
+            left: 24px;
+            transform: rotate(-135deg);
+        }
+        &--next {
+            right: 24px;
+            transform: rotate(45deg);
+        }
     }
 }

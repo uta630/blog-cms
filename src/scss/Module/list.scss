@@ -1,5 +1,14 @@
 .c-list {
-    &__heading {}
-    &__contents {}
+    &__title {
+        margin-bottom: 8px;
+        padding-bottom: 8px;
+
+        border-bottom: 1px solid $dark-gray;
+    }
+
+    &__contents {
+        line-height: 1.4;
+    }
+
     &__link {}
 }

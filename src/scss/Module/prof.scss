@@ -1,5 +1,8 @@
 .c-prof {
-    &__thumb {}
-    &__name {}
-    &__intro {}
+    line-height: 1.4;
+    font-size: 14px;
+
+    &__thumb {
+        margin-bottom: 12px;
+    }
 }

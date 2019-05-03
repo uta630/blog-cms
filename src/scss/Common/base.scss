@@ -1,0 +1,28 @@
+body {
+    background: $light-gray;
+    
+    color: $dark-gray;
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+img {
+    width: 100%;
+}
+
+a {
+    color: $primary-color;
+    
+    &:hover {
+        text-decoration: none;
+    }
+}
+
+input, textarea {
+    appearance: none;
+    border: none;
+    outline: none;
+}
