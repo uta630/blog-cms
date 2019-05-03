@@ -68,7 +68,7 @@ gulp.task('css', function(){
 // task : html
 gulp.task('ejs', function(){
   return gulp
-    .src(['./src/ejs/*.ejs'])
+    .src(['./src/ejs/**/*.ejs'])
     .pipe(plumber({
         handleError: function(err){
             this.emit('end');
