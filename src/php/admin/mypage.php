@@ -32,7 +32,7 @@
             <div class="c-panel__items">
                 <a href="/admin/changepass.php" class="c-panel__link">パスワード</a>
                 <a href="/admin/unregister.php" class="c-panel__link">退会</a>
-                <a href="/admin/signup.php" class="c-panel__link">ログアウト</a>
+                <a href="/admin/signout.php" class="c-panel__link">ログアウト</a>
             </div>
         </div>
     </div>

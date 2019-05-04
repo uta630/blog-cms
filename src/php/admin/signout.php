@@ -1,5 +1,7 @@
-<?php include('./common/head.php'); ?>
+<?php
 
-<?php include('./common/common.php'); ?>
+require('function.php');
 
-<?php include('./common/footer.php'); ?>
+session_destroy();
+
+header('Location:signin.php');
