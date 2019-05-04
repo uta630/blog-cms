@@ -125,4 +125,13 @@
         
         margin-top: 12px;
     }
+
+
+    &__msg {
+        font-size: 14px;
+
+        &--alert {
+            color: $red;
+        }
+    }
 }
