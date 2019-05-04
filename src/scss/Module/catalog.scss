@@ -1,0 +1,38 @@
+.c-catalog {
+    margin-top: 12px;
+
+    border: 1px solid $dark-gray;
+
+    &__link {
+        @include txt-ellipsis;
+
+        display: block;
+
+        width: 100%;
+        
+        padding: 12px;
+
+        text-decoration: none;
+        color: $dark-gray;
+
+        box-sizing: border-box;
+
+        &:not(:last-child) {
+            border-bottom: 1px solid $dark-gray;
+        }
+
+        &:hover {
+            background: $light-gray;
+        }
+    }
+
+    &__btn {
+        margin: 18px auto 0;
+
+        text-align: center;
+
+        & .c-btn {
+            display: inline-block;
+        }
+    }
+}

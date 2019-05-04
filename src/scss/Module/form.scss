@@ -1,4 +1,6 @@
 .c-form {
+    margin-top: 16px;
+
     &__link {
         font-size: 12px;
         margin-bottom: 12px;
@@ -44,13 +46,73 @@
         height: 152px;
 
         line-height: 1.4;
-
-        border: none;
     }
 
     &__submit {
         display: block;
         
         margin: 12px auto 0;
+    }
+
+    &__images {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__category {
+        & label {
+            margin: 0 6px;
+        }
+        & input[type="radio"] {
+            border: 1px solid #333;
+            width: 12px;
+            height: 12px;
+            margin: 0;
+            margin-right: 4px;
+            border-radius: 50%;
+        }
+        & input[type="radio"]:checked {
+            background: #333;
+        }
+    }
+
+    &__thumb {
+        &-wrap {
+            position: relative;
+
+            flex-basis: 28%;
+            height: 120px;
+
+            border-radius: 3px;
+            border: 1px solid $gray;
+
+            &:hover {
+                background: $light-gray;
+            }
+
+            &::before {
+                content: 'IMG';
+
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+
+                margin: auto;
+
+                line-height: 120px;
+                text-align: center;
+            }
+        }
+
+        display: block;
+
+        opacity: 0;
+        
+        width: 100%;
+        height: 100%;
+
+        cursor: pointer;
     }
 }

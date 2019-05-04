@@ -8,6 +8,15 @@
 }
 
 /*
+ *  3点リーダー
+ */
+@mixin txt-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/*
  *  ブレイクポイント
  */
  $breakpoint-up: (

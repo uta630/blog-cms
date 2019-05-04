@@ -114,10 +114,14 @@
     }
 
     background: $white;
+
     max-width: 320px;
+    width: 100%;
 
     margin: 4%;
     padding: 4%;
+
+    box-sizing: border-box;
 
     &--wide {
         max-width: 640px
