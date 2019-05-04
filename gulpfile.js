@@ -18,10 +18,6 @@ const gulpStylelint = require('gulp-stylelint');
 const header = require('gulp-header');
 const cleanCSS = require('gulp-clean-css');
 
-// require : html
-const ejs = require('gulp-ejs');
-const htmlmin = require('gulp-htmlmin');
-
 // require : js
 const uglify = require('gulp-uglify');
 const webpack = require('webpack');
@@ -66,15 +62,14 @@ gulp.task('css', function(){
 });
 
 // task : html
-gulp.task('ejs', function(){
+gulp.task('php', function(){
   return gulp
-    .src(['./src/ejs/**/*.ejs'])
+    .src(['./src/php/**/*.php'])
     .pipe(plumber({
         handleError: function(err){
             this.emit('end');
         }
     }))
-    .pipe(ejs())
     .pipe(rename({extname: '.php'}))
     .pipe(gulp.dest('./dist'));
 });
@@ -127,14 +122,14 @@ gulp.task('connect-sync', function() {
     browserSync.reload();
   };
   gulp.watch('src/scss/**/*.scss').on('change', gulp.series('scss', 'css', 'imagemin', browserReload));
-  gulp.watch('src/**/*.ejs').on('change', gulp.series('ejs', 'imagemin', browserReload));
+  gulp.watch('src/**/*.php').on('change', gulp.series('php', 'imagemin', browserReload));
   gulp.watch('src/**/*.js').on('change', gulp.series('webpack', 'minjs', 'imagemin', browserReload));
 });
 
 gulp.task('default',
   gulp.series(
     'scss', 'css',
-    'ejs',
+    'php',
     'webpack', 'minjs',
     'imagemin',
     'connect-sync')
