@@ -28,6 +28,10 @@
 
 .c-sidebar {
     flex-basis: $sidebar-width;
+
+    @include mq-down('md') {
+        margin-top: 24px;
+    }
     
     &__section {
         background: $white;
