@@ -114,9 +114,14 @@
     }
 
     background: $white;
-    max-width: 640px;
+    max-width: 320px;
 
-    padding: 6% 4%;
+    margin: 4%;
+    padding: 4%;
+
+    &--wide {
+        max-width: 640px
+    }
 
     &__title {
         width: 100%;

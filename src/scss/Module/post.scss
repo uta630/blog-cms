@@ -14,7 +14,7 @@
 
     &__title {
         color: $primary-color;
-        font-size: 24px;
+        font-size: 18px;
         font-weight:  bold;
     }
 
@@ -25,10 +25,10 @@
     &__category {
         background: $secondary-color;
 
-        padding: 4px 8px;
+        padding: 4px 6px;
 
         color: $white;
-        font-size: 12px;
+        font-size: 10px;
 
         border-radius: 6px;
     }
@@ -36,7 +36,7 @@
     &__contents {}
     &__text {
         line-height: 1.4;
-        font-size: 16px;
+        font-size: 14px;
     }
     &__more {}
 
