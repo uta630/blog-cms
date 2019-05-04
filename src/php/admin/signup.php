@@ -57,7 +57,7 @@ if(!empty($_POST)){
                 array(
                     ':username' => $name,
                     ':email' => $email,
-                    ':pass' => password_hash($pass, PASSWORD_DEFAULT),
+                    ':pass' => $pass,
                     ':create_date' => date('Y-m-d H:i:s')
                 )
             );
