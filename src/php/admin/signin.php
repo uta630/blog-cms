@@ -5,51 +5,30 @@ error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 
 if(!empty($_POST)){
-    // 定数 : エラー文言
-    define('ERR_MSG_EMPTY', '空の項目があります。');
-    define('ERR_MSG_PASS_FORMAT', 'パスワードの形式が間違っています。');
-    define('ERR_MSG_PASS_LEN', 'パスワードは6文字以上で入力してください。');
-    define('ERR_MSG_ACCOUNT', '名前またはパスワードが間違っています。');
-
-    // 変数 : エラー文言用
     $name = $_POST['name'];
     $pass = $_POST['pass'];
-    // 変数 : エラー文言用
-    $err_msg = array();
 
-    // 空チェック
-    if(empty($name) || empty($pass)){
-        $err_msg['empty'] = ERR_MSG_EMPTY;
-    }
+    validRequired($name, 'empty');
+    validRequired($pass, 'empty');
         
     if(empty($err_msg)){
-        if(mb_strlen($pass) < 6){
-            $err_msg['pass'] = ERR_MSG_PASS_LEN;
-        } elseif(!preg_match("/^[a-zA-Z0-9]+$/", $pass)) {
-            $err_msg['pass'] = ERR_MSG_PASS_FORMAT;
-        }
+        validHarf($pass, 'pass');
+        validMinLength($pass, 'pass');
+        validMaxLength($pass, 'pass');
 
         if(empty($err_msg)){
-            //DBへの接続準備
-            $dns     = "mysql:dbname=blog;host=localhost;charset=utf8";
-            $dbname  = "root";
-            $dbpass  = "root";
-            $options = array(
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true
-            );
-            $dbh  = new PDO($dns, $dbname, $dbpass, $options);
-            $stmt = $dbh->prepare('SELECT * FROM users WHERE username = :username AND pass = :pass');
-            $stmt->execute(array(':username' => $name, ':pass' => $pass));
+            $dbh = dbConnect();
+            $sql = 'SELECT * FROM users WHERE username = :username AND pass = :pass';
+            $data = array(':username' => $name, ':pass' => $pass);
+            $stmt = queryPost($dbh, $sql, $data);
 
             $result = 0;
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if($result){
-                session_start();
                 $_SESSION['login'] = true;
                 $_SESSION['name']  = $name;
+                $_SESSION['user_id'] = $result['id'];
                 header("Location:mypage.php");
             } else {
                 $err_msg['account'] = ERR_MSG_ACCOUNT;
