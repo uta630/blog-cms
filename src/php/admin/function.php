@@ -1,10 +1,13 @@
 <?php
-// デバッグ
-
+/* ログ出力 */
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 ini_set('log_errors', 'on');
 ini_set('error_log', 'php.log');
+
+/* セッション */
+session_start();
+session_regenerate_id();
 
 /* 処理系 */
 // エラーメッセージ

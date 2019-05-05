@@ -26,7 +26,6 @@ if(!empty($_POST)){
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if($result){
-                session_start();
                 $_SESSION['login'] = true;
                 $_SESSION['name']  = $name;
                 header("Location:mypage.php");

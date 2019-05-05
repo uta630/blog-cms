@@ -33,6 +33,9 @@ if(!empty($_POST)){
                 );
                 queryPost($dbh, $sql, $data);
                 
+                $_SESSION['login'] = true;
+                $_SESSION['name']  = $name;
+                
                 header("Location:mypage.php");
             } catch(Exception $e) {
                 error_log('エラー発生:'.$e->getMessage());

@@ -1,3 +1,10 @@
+<?php
+    require('function.php');
+    if(!$_SESSION['login']){
+        header('Location:signin.php');
+    }
+?>
+
 <?php include('./common/head.php'); ?>
 
 <div class="c-admin-wrap">
