@@ -96,3 +96,37 @@ function queryPost($dbh, $sql, $data){
     $stmt->execute($data);
     return $stmt;
 }
+
+/* メール送信 */
+function sendMail($from, $to, $subject, $comment){
+    if(!empty($to) && !empty($subject) && !empty($comment)){
+        mb_language('Japanese');
+        mb_internal_encoding('UTF-8');
+
+        $result = mb_send_mail($to, $subject, $comment, 'From: '.$from);
+
+        if($result){
+            // debug('メールを送信しました。');
+        } else {
+            // debug('【エラー発生】メールの送信に失敗しました。');
+        }
+    }
+}
+
+/* ユーザ情報取得 */
+function getUser($userID){
+    try {
+        $dbh = dbConnect();
+        $sql = 'SELECT * FROM users WHERE id = :userID AND delete_flg = 0';
+        $data = array(':userID' => $userID);
+        $stmt = queryPost($dbh, $sql, $data);
+
+        if($stmt){
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } else {
+            return false;
+        }
+    } catch(Exception $e) {
+        error_log('エラー発生:'.$e->getMessage());
+    }
+}

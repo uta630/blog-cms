@@ -35,6 +35,7 @@ if(!empty($_POST)){
                 
                 $_SESSION['login'] = true;
                 $_SESSION['name']  = $name;
+                $_SESSION['user_id'] = $result['id'];
                 
                 header("Location:mypage.php");
             } catch(Exception $e) {

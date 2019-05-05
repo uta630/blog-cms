@@ -28,6 +28,7 @@ if(!empty($_POST)){
             if($result){
                 $_SESSION['login'] = true;
                 $_SESSION['name']  = $name;
+                $_SESSION['user_id'] = $result['id'];
                 header("Location:mypage.php");
             } else {
                 $err_msg['account'] = ERR_MSG_ACCOUNT;
