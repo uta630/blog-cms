@@ -20,6 +20,7 @@ define('ERR_MSG_EMAIL', 'メールの形式が違います');
 define('ERR_MSG_ACCOUNT', '入力情報に誤りがあります');
 
 define('ERR_MSG_EMAIL_DUP', '入力されたEmailは既に登録されています');
+define('ERR_MSG_NAME_DUP', '入力された名前は既に登録されています');
 
 define('ERR_MSG','エラーが発生しました。しばらく経ってからやり直してください。');
 
@@ -72,6 +73,23 @@ function validEmailDup($email){
 
         if(!empty(array_shift($result))){
             $err_msg['email'] = ERR_MSG_EMAIL_DUP;
+        }
+    } catch(Exception $e) {
+        error_log('エラー発生:'.$e->getMessage());
+        $err_msg['common'] = ERR_MSG;
+    }
+}
+function validNameDup($name){
+    global $err_msg;
+    try {
+        $dbh = dbConnect();
+        $sql = 'SELECT count(*) FROM users WHERE username = :username AND delete_flg = 0';
+        $data = array(':username' => $name);
+        $stmt = queryPost($dbh, $sql, $data);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if(!empty(array_shift($result))){
+            $err_msg['name'] = ERR_MSG_NAME_DUP;
         }
     } catch(Exception $e) {
         error_log('エラー発生:'.$e->getMessage());

@@ -20,6 +20,7 @@ if(!empty($_POST)){
         validMaxLength($pass, 'pass');
         validEmail($email, 'email');
         validEmailDup($email);
+        validNameDup($name);
         
         if(empty($err_msg)){
             try{
@@ -67,6 +68,7 @@ if(!empty($_POST)){
         <form method="post" class="c-form">
             <label for="name" class="c-form__label">
                 名前
+                <p class="c-form__msg c-form__msg--alert"><?php if(!empty($err_msg['name'])) echo $err_msg['name'] ; ?></p>
                 <input type="text" name="name" class="c-form__input" value="<?php if(!empty($_POST['name'])) echo $_POST['name'] ; ?>">
             </label>
 
