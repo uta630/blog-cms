@@ -16,6 +16,8 @@ define('ERR_MSG_MAXLEN', '256文字以内で入力してください');
 define('ERR_MSG_EMAIL', 'メールの形式が違います');
 define('ERR_MSG_ACCOUNT', '入力情報に誤りがあります');
 
+define('ERR_MSG_EMAIL_DUP', '入力されたEmailは既に登録されています');
+
 define('ERR_MSG','エラーが発生しました。しばらく経ってからやり直してください。');
 
 $err_msg = array();
@@ -54,6 +56,23 @@ function validHarf($value, $key){
     if(!preg_match("/^[a-zA-Z0-9]+$/", $value)){
         global $err_msg;
         $err_msg[$key] = ERR_MSG_HARF_FORMAT;
+    }
+}
+function validEmailDup($email){
+    global $err_msg;
+    try {
+        $dbh = dbConnect();
+        $sql = 'SELECT count(*) FROM users WHERE email = :email AND delete_flg = 0';
+        $data = array(':email' => $email);
+        $stmt = queryPost($dbh, $sql, $data);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if(!empty(array_shift($result))){
+            $err_msg['email'] = ERR_MSG_EMAIL_DUP;
+        }
+    } catch(Exception $e) {
+        error_log('エラー発生:'.$e->getMessage());
+        $err_msg['common'] = ERR_MSG;
     }
 }
 

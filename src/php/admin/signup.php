@@ -19,6 +19,7 @@ if(!empty($_POST)){
         validMinLength($pass, 'pass');
         validMaxLength($pass, 'pass');
         validEmail($email, 'email');
+        validEmailDup($email);
         
         if(empty($err_msg)){
             try{
