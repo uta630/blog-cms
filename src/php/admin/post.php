@@ -30,15 +30,18 @@
                 <div class="c-form__images">
                     <label class="c-form__thumb-wrap">
                         <input type="hidden" name="MAX_FILE_SIZE" value="3145728">
-                        <input type="file" name="pic1" class="c-form__thumb">
+                        <input type="file" name="pic1" class="c-form__thumb js-post-image">
+                        <img src="" class="c-form__thumb--prev">
                     </label>
                     <label class="c-form__thumb-wrap">
                         <input type="hidden" name="MAX_FILE_SIZE" value="3145728">
-                        <input type="file" name="pic1" class="c-form__thumb">
+                        <input type="file" name="pic1" class="c-form__thumb js-post-image">
+                        <img src="" class="c-form__thumb--prev">
                     </label>
                     <label class="c-form__thumb-wrap">
                         <input type="hidden" name="MAX_FILE_SIZE" value="3145728">
-                        <input type="file" name="pic1" class="c-form__thumb">
+                        <input type="file" name="pic1" class="c-form__thumb js-post-image">
+                        <img src="" class="c-form__thumb--prev">
                     </label>
                 </div>
             </div>
