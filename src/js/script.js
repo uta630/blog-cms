@@ -12,9 +12,9 @@ $(function(){
     $('.js-bxslider').bxSlider({
         infiniteLoop: false,
         preloadImages: 'visible',
-        precSelector: '.c-post__icon--prev',
-        prevText: '<',
+        prevSelector: '.c-post__icon--prev',
+        prevText: '',
         nextSelector: '.c-post__icon--next',
-        nextText: '>',
+        nextText: '',
     });
 });
