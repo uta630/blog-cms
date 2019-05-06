@@ -14,9 +14,13 @@
 
             <div class="c-post__contents">
                 <div class="c-post__images">
-                    <img src="/images/default.jpg" alt="" class="c-post__thumb">
-                    <i class="c-post__icon c-post__icon--prev js-slide-prev"></i>
-                    <i class="c-post__icon c-post__icon--next js-slide-next"></i>
+                    <div class="js-bxslider">
+                        <img src="/images/default0.png" alt="" class="c-post__thumb">
+                        <img src="/images/default1.png" alt="" class="c-post__thumb">
+                        <img src="/images/default2.png" alt="" class="c-post__thumb">
+                    </div>
+                    <i class="c-post__icon c-post__icon--prev"></i>
+                    <i class="c-post__icon c-post__icon--next"></i>
                 </div>
 
                 <p class="c-post__text">
