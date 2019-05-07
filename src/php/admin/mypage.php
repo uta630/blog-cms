@@ -1,8 +1,11 @@
 <?php
-    require('function.php');
-    if(!$_SESSION['login']){
-        header('Location:signin.php');
-    }
+require('function.php');
+debug('「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「');
+debug('「　マイページ　');
+debug('「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「');
+debugLogStart();
+require('auth.php');
+
 ?>
 
 <?php include('./common/head.php'); ?>

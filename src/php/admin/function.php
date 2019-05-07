@@ -9,6 +9,25 @@ ini_set('error_log', 'php.log');
 session_start();
 session_regenerate_id();
 
+/* デバッグ */
+$debug_flg = true;
+function debug($value){
+    global $debug_flg;
+    if(!empty($debug_flg)){
+        error_log('デバッグ'.$value);
+    }
+}
+
+function debugLogStart(){
+    debug('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 画面表示処理開始');
+    debug('セッションID:'.session_id());
+    debug('セッション変数の中身:'.print_r($_SESSION, true));
+    debug('現在日時タイムスタンプ:'.time());
+    if(!empty($_SESSION['login_date']) && !empty($_SESSION['login_limit'])){
+        debug('ログイン期限日時タイムスタンプ:'.( $_SESSION['login_date'] + $_SESSION['login_limit'] ));
+    }
+}
+
 /* 処理系 */
 // エラーメッセージ
 define('ERR_MSG_EMPTY', '空の項目があります');
@@ -21,6 +40,8 @@ define('ERR_MSG_ACCOUNT', '入力情報に誤りがあります');
 
 define('ERR_MSG_EMAIL_DUP', '入力されたEmailは既に登録されています');
 define('ERR_MSG_NAME_DUP', '入力された名前は既に登録されています');
+define('ERR_MSG_PASS_BEFORE', '古いパスワードが違います');
+
 
 define('ERR_MSG','エラーが発生しました。しばらく経ってからやり直してください。');
 
@@ -124,9 +145,9 @@ function sendMail($from, $to, $subject, $comment){
         $result = mb_send_mail($to, $subject, $comment, 'From: '.$from);
 
         if($result){
-            // debug('メールを送信しました。');
+            debug('メールを送信しました。');
         } else {
-            // debug('【エラー発生】メールの送信に失敗しました。');
+            debug('【エラー発生】メールの送信に失敗しました。');
         }
     }
 }

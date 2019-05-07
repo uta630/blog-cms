@@ -1,5 +1,9 @@
 <?php
 require('function.php');
+debug('「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「');
+debug('「　ユーザー登録ページ　');
+debug('「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「');
+debugLogStart();
 
 if(!empty($_POST)){
     $name    = $_POST['name'];
@@ -29,16 +33,21 @@ if(!empty($_POST)){
                 $data = array(
                     ':username' => $name,
                     ':email' => $email,
-                    ':pass' => $pass,
+                    ':pass' => password_hash($pass, PASSWORD_DEFAULT),
                     ':create_date' => date('Y-m-d H:i:s')
                 );
-                queryPost($dbh, $sql, $data);
+                $stmt = queryPost($dbh, $sql, $data);
                 
-                $_SESSION['login'] = true;
-                $_SESSION['name']  = $name;
-                $_SESSION['user_id'] = $result['id'];
-                
-                header("Location:mypage.php");
+                if($stmt){
+                    $sesLimit = 60*60;
+                    $_SESSION['login_date']  = time();
+                    $_SESSION['login_limit'] = $sesLimit;
+                    $_SESSION['user_id']     = $result['id'];
+
+                    debug('セッション変数の中身:'.print_r($_SESSION, true));
+                    
+                    header("Location:mypage.php");
+                }
             } catch(Exception $e) {
                 error_log('エラー発生:'.$e->getMessage());
                 $err_msg['common'] = ERR_MSG;
