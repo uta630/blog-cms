@@ -30,7 +30,7 @@ if(!empty($_POST)){
         validMaxLength($new_pass, 'new_pass');
 
         if(!password_verify($old_pass, $userData['pass'])){
-            $err_msg['old_pass'] = ERR_MSG_PASS_BEFORE;
+            $err_msg['old_pass'] = ERR_MSG_PASS_DIFF;
         }
 
         if(empty($err_msg)){
