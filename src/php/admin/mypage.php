@@ -7,6 +7,7 @@ debugLogStart();
 require('auth.php');
 
 $userData = getUser($_SESSION['user_id']);
+debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
 ?>
 
 <?php include('./common/head.php'); ?>
