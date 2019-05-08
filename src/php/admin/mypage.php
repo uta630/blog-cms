@@ -6,6 +6,7 @@ debug('「「「「「「「「「「「「「「「「「「「「「「「「�
 debugLogStart();
 require('auth.php');
 
+$userData = getUser($_SESSION['user_id']);
 ?>
 
 <?php include('./common/head.php'); ?>
@@ -19,8 +20,8 @@ require('auth.php');
                 <img src="/images/default.jpg" alt="" class="c-myself__thumb">
             </div>
             <div class="c-myself__contents">
-                <p class="c-myself__text">名前：xxx xxxxx</p>
-                <p class="c-myself__text">メールアドレス：xxxx@xxxxxx.xx.xx</p>
+                <p class="c-myself__text">名前：<?php echo $userData['username'] ; ?></p>
+                <p class="c-myself__text">メールアドレス：<?php echo $userData['email'] ; ?></p>
             </div>
 
             <a href="/admin/myself.php" class="c-myself__link c-btn c-btn--green">編集</a>

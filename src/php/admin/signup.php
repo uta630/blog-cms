@@ -42,7 +42,7 @@ if(!empty($_POST)){
                     $sesLimit = 60*60;
                     $_SESSION['login_date']  = time();
                     $_SESSION['login_limit'] = $sesLimit;
-                    $_SESSION['user_id']     = $result['id'];
+                    $_SESSION['user_id']     = $dbh->lastInsertId();
 
                     debug('セッション変数の中身:'.print_r($_SESSION, true));
                     

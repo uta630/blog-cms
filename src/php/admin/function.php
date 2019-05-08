@@ -14,7 +14,7 @@ $debug_flg = true;
 function debug($value){
     global $debug_flg;
     if(!empty($debug_flg)){
-        error_log('デバッグ'.$value);
+        error_log('デバッグ:'.$value);
     }
 }
 
@@ -154,6 +154,7 @@ function sendMail($from, $to, $subject, $comment){
 
 /* ユーザ情報取得 */
 function getUser($userID){
+    debug('ユーザ情報を取得します。');
     try {
         $dbh = dbConnect();
         $sql = 'SELECT * FROM users WHERE id = :userID AND delete_flg = 0';
@@ -169,3 +170,5 @@ function getUser($userID){
         error_log('エラー発生:'.$e->getMessage());
     }
 }
+
+?>

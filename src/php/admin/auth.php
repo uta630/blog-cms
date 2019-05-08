@@ -10,9 +10,15 @@ if(!empty($_SESSION['login_date'])){
     } else {
         debug('ログイン有効期限以内です。');
         $_SESSION['login_date'] = time();
-        debug('マイページに遷移します。');
-        header('Location:mypage.php');
+
+        if(basename($_SERVER['PHP_SELF'] === 'signin.php')){
+            debug('マイページに遷移します。');
+            header('Location:mypage.php');
+        }
     }
 } else {
     debug('未ログインのユーザです。');
+    if(basename($_SERVER['PHP_SELF']) !== 'signin.php'){
+        header('Location:signin.php');
+    }
 }

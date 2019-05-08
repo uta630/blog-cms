@@ -39,7 +39,7 @@ if(!empty($_POST)){
             try {
                 $dbh = dbConnect();
                 $sql = 'UPDATE users SET pass = :pass WHERE id = :id';
-                $data = array(':id' => $_SESSION['user_id'], ':pass' => $new_pass);
+                $data = array(':id' => $_SESSION['user_id'], ':pass' => password_hash($new_pass, PASSWORD_DEFAULT));
                 $stmt = queryPost($dbh, $sql, $data);
 
                 if($stmt){
