@@ -40,7 +40,8 @@ define('ERR_MSG_ACCOUNT', '入力情報に誤りがあります');
 
 define('ERR_MSG_EMAIL_DUP', '入力されたEmailは既に登録されています');
 define('ERR_MSG_NAME_DUP', '入力された名前は既に登録されています');
-define('ERR_MSG_PASS_BEFORE', '古いパスワードが違います');
+define('ERR_MSG_NAME_DIFF', '名前が違います。');
+define('ERR_MSG_PASS_DIFF', 'パスワードが違います');
 
 
 define('ERR_MSG','エラーが発生しました。しばらく経ってからやり直してください。');
