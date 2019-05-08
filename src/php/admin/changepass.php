@@ -1,12 +1,18 @@
 <?php
 require('function.php');
-if(!$_SESSION['login']){
-    header('Location:signin.php');
-}
+debug('「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「');
+debug('「　パスワード変更ページ　');
+debug('「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「');
+debugLogStart();
+require('auth.php');
 
 $userData = getUser($_SESSION['user_id']);
+debug('取得したユーザ情報:'.print_r($userData,true));
 
 if(!empty($_POST)){
+    debug('POST送信があります。');
+    debug('POST送信:'.print_r($userData,true));
+
     $old_pass = $_POST['old_pass'];
     $new_pass = $_POST['new_pass'];
     $re_new_pass = $_POST['re_new_pass'];
@@ -16,16 +22,24 @@ if(!empty($_POST)){
     validRequired($re_new_pass, 're_new_pass');
 
     if(empty($err_msg)){
+        debug('未入力チェックOK。');
+
         validMatch($new_pass, $re_new_pass, 'new_pass');
         validHarf($new_pass, 'new_pass');
         validMinLength($new_pass, 'new_pass');
         validMaxLength($new_pass, 'new_pass');
 
+        if(!password_verify($old_pass, $userData['pass'])){
+            $err_msg['old_pass'] = ERR_MSG_PASS_BEFORE;
+        }
+
         if(empty($err_msg)){
+            debug('バリデーションOK。');
+
             try {
                 $dbh = dbConnect();
                 $sql = 'UPDATE users SET pass = :pass WHERE id = :id';
-                $data = array(':id' => $_SESSION['user_id'], ':pass' => $new_pass);
+                $data = array(':id' => $_SESSION['user_id'], ':pass' => password_hash($new_pass, PASSWORD_DEFAULT));
                 $stmt = queryPost($dbh, $sql, $data);
 
                 if($stmt){
@@ -47,6 +61,7 @@ EOT;
                 }
             } catch(Exception $e) {
                 error_log('エラー発生:'.$e->getMessage());
+                $err_msg['common'] = ERR_MSG;
             }
         }
     }

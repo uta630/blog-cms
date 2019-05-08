@@ -1,7 +1,12 @@
 <?php
-
 require('function.php');
 
-session_destroy();
+debug('「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「');
+debug('「　ログアウトページ　');
+debug('「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「');
+debugLogStart();
 
+debug('ログアウトします。');
+session_destroy();
+debug('ログインページへ遷移します。');
 header('Location:signin.php');

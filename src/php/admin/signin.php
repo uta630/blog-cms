@@ -1,38 +1,53 @@
 <?php
 require('function.php');
+debug('「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「');
+debug('「　ログインページ　');
+debug('「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「');
+debugLogStart();
+require('auth.php');
 
-error_reporting(E_ALL);
-ini_set('display_errors', 'on');
 
 if(!empty($_POST)){
-    $name = $_POST['name'];
+    $email = $_POST['email'];
     $pass = $_POST['pass'];
 
-    validRequired($name, 'empty');
+    validRequired($email, 'empty');
     validRequired($pass, 'empty');
         
-    if(empty($err_msg)){
-        validHarf($pass, 'pass');
-        validMinLength($pass, 'pass');
-        validMaxLength($pass, 'pass');
+    validHarf($pass, 'pass');
+    validMinLength($pass, 'pass');
+    validMaxLength($pass, 'pass');
 
-        if(empty($err_msg)){
+    if(empty($err_msg)){
+        try {
             $dbh = dbConnect();
-            $sql = 'SELECT * FROM users WHERE username = :username AND pass = :pass';
-            $data = array(':username' => $name, ':pass' => $pass);
+            $sql = 'SELECT pass,id  FROM users WHERE email = :email AND delete_flg = 0';
+            $data = array(':email' => $email);
             $stmt = queryPost($dbh, $sql, $data);
 
-            $result = 0;
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if($result){
-                $_SESSION['login'] = true;
-                $_SESSION['name']  = $name;
+            debug('クエリ結果の中身：'.print_r($result,true));
+
+            if(!empty($result) && password_verify($pass, array_shift($result))){
+                debug('パスワードがマッチしました。');
+
+                $sesLimit = 60*60;
+                $_SESSION['login_date'] = time();
+                $_SESSION['login_limit']  = $sesLimit;
                 $_SESSION['user_id'] = $result['id'];
+
+                debug('セッション変数の中身：'.print_r($_SESSION,true));
+                debug('マイページへ遷移します。');
                 header("Location:mypage.php");
             } else {
+                debug(' パスワードがマッチしませんでした。');
+
                 $err_msg['account'] = ERR_MSG_ACCOUNT;
             }
+        } catch(Exception $e) {
+            error_log('エラー発生:'.$e->getMessage());
+            $err_msg['common'] = ERR_MSG;
         }
     }
 }
@@ -52,8 +67,8 @@ if(!empty($_POST)){
 
         <form method="post" class="c-form">
             <label for="name" class="c-form__label">
-                名前
-                <input type="text" name="name" class="c-form__input" value="<?php if(!empty($_POST['name'])) echo $_POST['name'] ;?>">
+                メールアドレス
+                <input type="text" name="email" class="c-form__input" value="<?php if(!empty($_POST['email'])) echo $_POST['email'] ;?>">
             </label>
 
             <label for="pass" class="c-form__label">
