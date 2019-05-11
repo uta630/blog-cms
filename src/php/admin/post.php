@@ -32,6 +32,7 @@ if(!empty($_POST)){
     $title    = $_POST['title'];
     $text     = $_POST['text'];
     $category = $_POST['category'];
+    $status   = $_POST['status'];
 
     // 画像アップロード + パスを格納
     $pic1 = ( !empty($_FILES['pic1']['name']) ) ? uploadImg($_FILES['pic1'], 'pic1') : '' ;
@@ -71,7 +72,7 @@ if(!empty($_POST)){
             if($edit_flg){
                 debug('DBを更新します。');
                 $sql = 'UPDATE post
-                    SET user_id = :user_id, title = :title, text = :text, category = :category, pic1 = :pic1, pic2 = :pic2, pic3 = :pic3
+                    SET user_id = :user_id, title = :title, text = :text, category = :category, status = :status, pic1 = :pic1, pic2 = :pic2, pic3 = :pic3
                     WHERE user_id = :user_id AND id = :p_id';
                 $data = array(
                     ':p_id' => $p_id,
@@ -79,6 +80,7 @@ if(!empty($_POST)){
                     ':title' => $title,
                     ':text' => $text,
                     ':category' => $category,
+                    ':status' => $status,
                     ':pic1' => $pic1,
                     ':pic2' => $pic2,
                     ':pic3' => $pic3
@@ -86,13 +88,14 @@ if(!empty($_POST)){
             } else {
                 debug('DBに新規登録します。');
                 $sql = 'INSERT INTO
-                    post (user_id, title, text, category, pic1, pic2, pic3, create_date)
-                    values (:user_id, :title, :text, :category, :pic1, :pic2, :pic3, :create_date)';
+                    post (user_id, title, text, category, status, pic1, pic2, pic3, create_date)
+                    values (:user_id, :title, :text, :category, :status, :pic1, :pic2, :pic3, :create_date)';
                 $data = array(
                     ':user_id' => $userID,
                     ':title' => $title,
                     ':text' => $text,
                     ':category' => $category,
+                    ':status' => $status,
                     ':pic1' => $pic1,
                     ':pic2' => $pic2,
                     ':pic3' => $pic3,
@@ -127,6 +130,17 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         <p class="c-form__msg c-form__msg--alert"><?php if(!empty($err_msg['common'])) echo $err_msg['common'] ; ?></p>
 
         <form method="post" class="c-form">
+            <div class="c-form__label c-form__release">
+                <label>
+                    <input type="radio" name="status" value="private" <?php if('private' === getFormData('status')){ echo 'checked'; } ?> class="c-form__state">
+                    非公開
+                </label>
+                <label>
+                    <input type="radio" name="status" value="publish" <?php if('publish' === getFormData('status')){ echo 'checked'; } ?> class="c-form__state">
+                    公開
+                </label>
+            </div>
+
             <label for="title" class="c-form__label">
                 タイトル
                 <p class="c-form__msg c-form__msg--alert"><?php if(!empty($err_msg['title'])) echo $err_msg['title'] ; ?></p>
@@ -142,7 +156,7 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             <div class="c-form__label">
                 カテゴリ
                 <div class="c-form__category">
-                    <select name="category">
+                    <select name="category" class="c-form__select">
                         <option value="0">選択してください</option>
                         <option value="1">ブログ</option>
                         <option value="2">お知らせ</option>
@@ -176,7 +190,7 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             <div class="c-form__btnArea">
                 <input type="submit" value="投稿する" class="c-form__submit c-btn c-btn--blue">
 
-                <a href="/admin/mypage.php" class="c-form__btn c-btn">戻る</a>
+                <a href="/admin/postList.php" class="c-form__btn c-btn">戻る</a>
             </div>
         </form>
     </div>

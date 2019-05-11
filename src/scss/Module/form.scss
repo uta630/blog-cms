@@ -59,7 +59,7 @@
         justify-content: space-between;
     }
 
-    &__category {
+    &__release {
         & label {
             margin: 0 6px;
         }
@@ -72,7 +72,8 @@
             border-radius: 50%;
         }
         & input[type="radio"]:checked {
-            background: #333;
+            background: $primary-color;
+            border-color: $primary-color;
         }
     }
 
