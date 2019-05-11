@@ -10,11 +10,11 @@ require('auth.php');
 $userID = $_SESSION['user_id'];
 $p_id = (!empty($_GET['p_id'])) ? $_GET['p_id'] : '' ;
 $dbFormData = (!empty($p_id)) ? getPost($userID, $p_id) : '' ;
+$dbCategoryData = getCategory();
 $edit_flg = (empty($dbFormData)) ? false : true ;
-// $dbCategoryData = getCategory();
 debug('記事ID:'.$p_id);
 debug('フォーム用DBデータ:'.print_r($dbFormData, true));
-// debug('カテゴリデータ:'.print_r($dbCategoryData, true));
+debug('カテゴリデータ:'.print_r($dbCategoryData, true));
 
 // パラメータ改ざんチェック
 if(!empty($p_id) && empty($dbFormData)){
@@ -158,10 +158,9 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                 <div class="c-form__category">
                     <select name="category" class="c-form__select">
                         <option value="0">選択してください</option>
-                        <option value="1">ブログ</option>
-                        <option value="2">お知らせ</option>
-                        <option value="3">html</option>
-                        <option value="4">php</option>
+                        <?php foreach($dbCategoryData as $key => $val): ?>
+                        <option value="<?php echo sanitize($val['id']); ?>" <?php if(sanitize($val['id']) === $dbFormData['category']){ echo 'selected'; } ?>><?php echo sanitize($val['catname']); ?></option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
             </div>
