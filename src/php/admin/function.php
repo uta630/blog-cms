@@ -239,3 +239,37 @@ function uploadImg($file, $key){
         }
     }
 }
+
+// 
+function getFormData($str, $flg = false){
+    if($flg){
+        $method = $_GET;
+    }else{
+        $method = $_POST;
+    }
+    global $dbFormData;
+    // ユーザーデータがある場合
+    if(!empty($dbFormData)){
+        //フォームのエラーがある場合
+        if(!empty($err_msg[$str])){
+        //POSTにデータがある場合
+        if(isset($method[$str])){
+            return sanitize($method[$str]);
+        }else{
+            //ない場合（基本ありえない）はDBの情報を表示
+            return sanitize($dbFormData[$str]);
+        }
+        }else{
+        //POSTにデータがあり、DBの情報と違う場合
+        if(isset($method[$str]) && $method[$str] !== $dbFormData[$str]){
+            return sanitize($method[$str]);
+        }else{
+            return sanitize($dbFormData[$str]);
+        }
+        }
+    }else{
+        if(isset($method[$str])){
+        return sanitize($method[$str]);
+        }
+    }
+  }

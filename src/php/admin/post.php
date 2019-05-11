@@ -7,8 +7,9 @@ debugLogStart();
 require('auth.php');
 
 // 投稿データの取得
+$userID = $_SESSION['user_id'];
 $p_id = (!empty($_GET['p_id'])) ? $_GET['p_id'] : '' ;
-$dbFormData = (!empty($p_id)) ? getPost($_SESSION['user_id'], $p_id) : '' ;
+$dbFormData = (!empty($p_id)) ? getPost($userID, $p_id) : '' ;
 $edit_flg = (empty($dbFormData)) ? false : true ;
 $dbCategoryData = getCategory();
 debug('商品ID:'.$p_id);
@@ -28,18 +29,18 @@ if(!empty($_POST)){
     debug('POST情報:'.print_r($_POST, true));
     debug('FILE情報:'.print_r($_FILES, true));
 
-    $title = $_POST['title'];
-    $text = $_POST['text'];
+    $title    = $_POST['title'];
+    $text     = $_POST['text'];
     $category = $_POST['category'];
 
     // 画像アップロード + パスを格納
-    $pic1 = ( !empty($_FILES['pic1']['name'])) ? uploadImg($_FILES['pic1'], 'pic1' ) : '' ;
-    $pic2 = ( !empty($_FILES['pic2']['name'])) ? uploadImg($_FILES['pic2'], 'pic2' ) : '' ;
-    $pic3 = ( !empty($_FILES['pic3']['name'])) ? uploadImg($_FILES['pic3'], 'pic3' ) : '' ;
+    $pic1 = ( !empty($_FILES['pic1']['name']) ) ? uploadImg($_FILES['pic1'], 'pic1') : '' ;
+    $pic2 = ( !empty($_FILES['pic2']['name']) ) ? uploadImg($_FILES['pic2'], 'pic2') : '' ;
+    $pic3 = ( !empty($_FILES['pic3']['name']) ) ? uploadImg($_FILES['pic3'], 'pic3') : '' ;
     // 画像登録していないがすでに登録されている場合にDBのパスを入れておく
-    $pic1 = ( empty($pic1) && !empty($dbFormData['pic1']) ) ? $dbFormData['pic1'] : $pic1　;
-    $pic2 = ( empty($pic2) && !empty($dbFormData['pic2']) ) ? $dbFormData['pic2'] : $pic2　;
-    $pic3 = ( empty($pic3) && !empty($dbFormData['pic3']) ) ? $dbFormData['pic3'] : $pic3　;
+    $pic1 = ( empty($pic1) && !empty($dbFormData['pic1']) ) ? $dbFormData['pic1'] : $pic1 ;
+    $pic2 = ( empty($pic2) && !empty($dbFormData['pic2']) ) ? $dbFormData['pic2'] : $pic2 ;
+    $pic3 = ( empty($pic3) && !empty($dbFormData['pic3']) ) ? $dbFormData['pic3'] : $pic3 ;
 
     if(empty($dbFormData)){
         // 投稿バリデーション
@@ -69,12 +70,23 @@ if(!empty($_POST)){
             $dbh = dbConnect();
             if($edit_flg){
                 debug('DBを更新します。');
-                $sql = '';
+                $sql = 'UPDATE post SET ';
                 $data = array();
             } else {
                 debug('DBに新規登録します。');
-                $sql = '';
-                $data = array();
+                $sql = 'INSERT INTO
+                    post (user_id, title, text, category, pic1, pic2, pic3, create_date)
+                    values (:user_id, :title, :text, :category, :pic1, :pic2, :pic3, :create_date)';
+                $data = array(
+                    ':user_id' => $userID,
+                    ':title' => $title,
+                    ':text' => $text,
+                    ':category' => $category,
+                    ':pic1' => $pic1,
+                    ':pic2' => $pic2,
+                    ':pic3' => $pic3,
+                    ':create_date' => date('Y-m-d H:i:s')
+                );
             }
             debug('SQL:'.$sql);
             debug('データ:'.print_r($data, true));
@@ -82,9 +94,8 @@ if(!empty($_POST)){
             $stmt = queryPost($dbh, $sql, $data);
 
             if($stmt){
-                $_SESSION['msg_success'] = '登録しました。';
                 debug('マイページへ遷移します。');
-                header('Location:mypage.php');
+                header('Location:postList.php');
             }
         } catch(Exception $e) {
             error_log('エラー発生:'.$e->getMessage());
@@ -120,12 +131,12 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             <div class="c-form__label">
                 カテゴリ
                 <div class="c-form__category">
-                    <select name="categry" id="">
-                        <option name="category" value="0">選択してください</option>
-                        <option name="category" value="1">ブログ</option>
-                        <option name="category" value="2">お知らせ</option>
-                        <option name="category" value="3">html</option>
-                        <option name="category" value="4">php</option>
+                    <select name="category">
+                        <option value="0">選択してください</option>
+                        <option value="1">ブログ</option>
+                        <option value="2">お知らせ</option>
+                        <option value="3">html</option>
+                        <option value="4">php</option>
                     </select>
                 </div>
             </div>
@@ -140,12 +151,12 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                     </label>
                     <label class="c-form__thumb-wrap">
                         <input type="hidden" name="MAX_FILE_SIZE" value="3145728">
-                        <input type="file" name="pic1" class="c-form__thumb js-post-image">
+                        <input type="file" name="pic2" class="c-form__thumb js-post-image">
                         <img src="" class="c-form__thumb--prev">
                     </label>
                     <label class="c-form__thumb-wrap">
                         <input type="hidden" name="MAX_FILE_SIZE" value="3145728">
-                        <input type="file" name="pic1" class="c-form__thumb js-post-image">
+                        <input type="file" name="pic3" class="c-form__thumb js-post-image">
                         <img src="" class="c-form__thumb--prev">
                     </label>
                 </div>
