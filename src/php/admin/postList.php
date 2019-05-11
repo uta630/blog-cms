@@ -11,7 +11,7 @@ if(!is_numeric($currentPageNum)){
     header('Location:mypage.php');
 }
 
-$listSpan = 2;
+$listSpan = 10;
 $currentMinNum = (($currentPageNum - 1) * $listSpan);
 $dbPostData = getPostList($currentMinNum, $listSpan);
 
@@ -33,7 +33,11 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
         <div class="c-catalog">
             <?php foreach($dbPostData['data'] as $key => $val): ?>
-            <a href="/admin/post.php?p_id=<?php echo sanitize($val['id']); ?>" class="c-catalog__link"><?php echo sanitize($val['create_date']); ?> <?php echo sanitize($val['title']); ?></a>
+            <a href="/admin/post.php?p_id=<?php echo sanitize($val['id']); ?>" class="c-catalog__link">
+                <?php echo date('Y/m/d',  strtotime($val['create_date'])); ?>
+                <?php if($val['status'] === 'publish'){ ?> <i class="c-catalog__link--icon">公開済み</i> <?php } ?>
+                <?php echo sanitize($val['title']); ?>
+            </a>
             <?php endforeach; ?>
         </div>
 
