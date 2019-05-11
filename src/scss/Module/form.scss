@@ -59,20 +59,21 @@
         justify-content: space-between;
     }
 
-    &__category {
+    &__release {
         & label {
             margin: 0 6px;
         }
         & input[type="radio"] {
-            border: 1px solid #333;
             width: 12px;
             height: 12px;
             margin: 0;
             margin-right: 4px;
             border-radius: 50%;
+            box-shadow: 0 0 0 2px $gray;
         }
         & input[type="radio"]:checked {
-            background: #333;
+            box-shadow: 0 0 0 2px $light-green, 0 0 0px 2px #fff inset;
+            background: $light-green;
         }
     }
 

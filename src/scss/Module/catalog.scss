@@ -24,6 +24,16 @@
         &:hover {
             background: $light-gray;
         }
+
+        &--icon {
+            background: $light-green;
+
+            padding: 4px;
+
+            vertical-align: middle;
+            color: $white;
+            font-size: 10px;
+        }
     }
 
     &__btn {

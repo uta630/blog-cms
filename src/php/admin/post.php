@@ -10,9 +10,9 @@ require('auth.php');
 $userID = $_SESSION['user_id'];
 $p_id = (!empty($_GET['p_id'])) ? $_GET['p_id'] : '' ;
 $dbFormData = (!empty($p_id)) ? getPost($userID, $p_id) : '' ;
-$edit_flg = (empty($dbFormData)) ? false : true ;
 $dbCategoryData = getCategory();
-debug('商品ID:'.$p_id);
+$edit_flg = (empty($dbFormData)) ? false : true ;
+debug('記事ID:'.$p_id);
 debug('フォーム用DBデータ:'.print_r($dbFormData, true));
 debug('カテゴリデータ:'.print_r($dbCategoryData, true));
 
@@ -32,6 +32,7 @@ if(!empty($_POST)){
     $title    = $_POST['title'];
     $text     = $_POST['text'];
     $category = $_POST['category'];
+    $status   = $_POST['status'];
 
     // 画像アップロード + パスを格納
     $pic1 = ( !empty($_FILES['pic1']['name']) ) ? uploadImg($_FILES['pic1'], 'pic1') : '' ;
@@ -70,18 +71,31 @@ if(!empty($_POST)){
             $dbh = dbConnect();
             if($edit_flg){
                 debug('DBを更新します。');
-                $sql = 'UPDATE post SET ';
-                $data = array();
+                $sql = 'UPDATE post
+                    SET user_id = :user_id, title = :title, text = :text, category = :category, status = :status, pic1 = :pic1, pic2 = :pic2, pic3 = :pic3
+                    WHERE user_id = :user_id AND id = :p_id';
+                $data = array(
+                    ':p_id' => $p_id,
+                    ':user_id' => $userID,
+                    ':title' => $title,
+                    ':text' => $text,
+                    ':category' => $category,
+                    ':status' => $status,
+                    ':pic1' => $pic1,
+                    ':pic2' => $pic2,
+                    ':pic3' => $pic3
+                );
             } else {
                 debug('DBに新規登録します。');
                 $sql = 'INSERT INTO
-                    post (user_id, title, text, category, pic1, pic2, pic3, create_date)
-                    values (:user_id, :title, :text, :category, :pic1, :pic2, :pic3, :create_date)';
+                    post (user_id, title, text, category, status, pic1, pic2, pic3, create_date)
+                    values (:user_id, :title, :text, :category, :status, :pic1, :pic2, :pic3, :create_date)';
                 $data = array(
                     ':user_id' => $userID,
                     ':title' => $title,
                     ':text' => $text,
                     ':category' => $category,
+                    ':status' => $status,
                     ':pic1' => $pic1,
                     ':pic2' => $pic2,
                     ':pic3' => $pic3,
@@ -110,33 +124,43 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 <div class="c-admin-wrap">
     <div class="c-admin c-admin--wide">
-        <h2 class="c-admin__title">新規投稿</h2>
+        <h2 class="c-admin__title"><?php echo (!$edit_flg) ? '新規投稿' : '記事編集'; ?></h2>
 
         <p class="c-form__msg c-form__msg--alert"><?php if(!empty($err_msg['empty'])) echo $err_msg['empty'] ; ?></p>
         <p class="c-form__msg c-form__msg--alert"><?php if(!empty($err_msg['common'])) echo $err_msg['common'] ; ?></p>
 
         <form method="post" class="c-form">
+            <div class="c-form__label c-form__release">
+                <label>
+                    <input type="radio" name="status" value="private" <?php if('private' === getFormData('status')){ echo 'checked'; } ?> class="c-form__state">
+                    非公開
+                </label>
+                <label>
+                    <input type="radio" name="status" value="publish" <?php if('publish' === getFormData('status')){ echo 'checked'; } ?> class="c-form__state">
+                    公開
+                </label>
+            </div>
+
             <label for="title" class="c-form__label">
                 タイトル
                 <p class="c-form__msg c-form__msg--alert"><?php if(!empty($err_msg['title'])) echo $err_msg['title'] ; ?></p>
-                <input type="text" name="title" id="title" class="c-form__input" value="<?php if(!empty($title)) echo $title ; ?>">
+                <input type="text" name="title" id="title" class="c-form__input" value="<?php echo getFormData('title'); ?>">
             </label>
             
             <label for="text" class="c-form__label">
                 本文
                 <p class="c-form__msg c-form__msg--alert"><?php if(!empty($err_msg['text'])) echo $err_msg['text'] ; ?></p>
-                <textarea name="text" id="text" class="c-form__input c-form__textarea c-input"><?php if(!empty($text)) echo $text ; ?></textarea>
+                <textarea name="text" id="text" class="c-form__input c-form__textarea c-input"><?php echo getFormData('text'); ?></textarea>
             </label>
             
             <div class="c-form__label">
                 カテゴリ
                 <div class="c-form__category">
-                    <select name="category">
+                    <select name="category" class="c-form__select">
                         <option value="0">選択してください</option>
-                        <option value="1">ブログ</option>
-                        <option value="2">お知らせ</option>
-                        <option value="3">html</option>
-                        <option value="4">php</option>
+                        <?php foreach($dbCategoryData as $key => $val): ?>
+                        <option value="<?php echo sanitize($val['id']); ?>" <?php if(sanitize($val['id']) === $dbFormData['category']){ echo 'selected'; } ?>><?php echo sanitize($val['catname']); ?></option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
             </div>
@@ -165,7 +189,7 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             <div class="c-form__btnArea">
                 <input type="submit" value="投稿する" class="c-form__submit c-btn c-btn--blue">
 
-                <a href="/admin/mypage.php" class="c-form__btn c-btn">戻る</a>
+                <a href="/admin/postList.php" class="c-form__btn c-btn">戻る</a>
             </div>
         </form>
     </div>
