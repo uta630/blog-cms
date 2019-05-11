@@ -1,4 +1,20 @@
 .c-pager {
-    text-align: center;
+    display: flex;
+    justify-content: center;
+
     margin: 12px 0;
+
+    &__link {
+        margin: 0 6px;
+
+        text-decoration: none;
+
+        &:not(.is-active):hover {
+            text-decoration: underline;
+        }
+
+        &.is-active {
+            color: $dark-gray;
+        }
+    }
 }
