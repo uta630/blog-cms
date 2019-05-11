@@ -5,7 +5,22 @@ debug('「　投稿一覧ページ');
 debug('「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「');
 require('auth.php');
 
-$getPostData = getPostList();
+$currentPageNum = (!empty($_GET['p'])) ? $_GET['p'] : 1 ;
+if(!is_numeric($currentPageNum)){
+    error_log('エラー発生:指定ページに不正なアクセスがありました。');
+    header('Location:mypage.php');
+}
+
+$listSpan = 2;
+$currentMinNum = (($currentPageNum - 1) * $listSpan);
+$dbPostData = getPostList($currentMinNum, $listSpan);
+
+if(empty($dbPostData['data'])){
+    error_log('エラー発生:データがありませんでした。');
+    header('Location:mypage.php');
+}
+
+debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
 ?>
 
 <?php include('./common/head.php'); ?>
@@ -14,12 +29,10 @@ $getPostData = getPostList();
     <div class="c-admin c-admin--wide">
         <h2 class="c-admin__title">投稿一覧</h2>
 
-        <div class="c-pager">
-            < ... 12345 ... >
-        </div>
+        <?php pagination($currentPageNum, $dbPostData['total_page']); ?>
 
         <div class="c-catalog">
-            <?php foreach($getPostData as $key => $val): ?>
+            <?php foreach($dbPostData['data'] as $key => $val): ?>
             <a href="/admin/post.php" class="c-catalog__link"><?php echo sanitize($val['create_date']); ?> <?php echo sanitize($val['title']); ?></a>
             <?php endforeach; ?>
         </div>

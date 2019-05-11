@@ -179,7 +179,7 @@ function getUser($userID){
 }
 
 /* 投稿全体の情報取得 */
-function getPostList($currentMinNum = 0, $span = 20){
+function getPostList($currentMinNum = 1, $span = 20){
     debug('投稿全体の情報を取得します。');
     
     try {
@@ -188,7 +188,9 @@ function getPostList($currentMinNum = 0, $span = 20){
         $sql = 'SELECT id FROM post';
         $data = array();
         $stmt = queryPost($dbh, $sql, $data);
-
+        
+        $result['total'] = $stmt->rowCount();
+        $result['total_page'] = ceil($result['total'] / $span);
         if(!$stmt){
             return false;
         }
@@ -201,7 +203,8 @@ function getPostList($currentMinNum = 0, $span = 20){
         $stmt = queryPost($dbh, $sql, $data);
 
         if($stmt){
-            return $stmt->fetchAll();
+            $result['data'] = $stmt->fetchAll();
+            return $result;
         } else {
             return false;
         }
@@ -284,28 +287,69 @@ function getFormData($str, $flg = false){
     if(!empty($dbFormData)){
         //フォームのエラーがある場合
         if(!empty($err_msg[$str])){
-        //POSTにデータがある場合
-        if(isset($method[$str])){
-            return sanitize($method[$str]);
+            //POSTにデータがある場合
+            if(isset($method[$str])){
+                return sanitize($method[$str]);
+            } else {
+                //ない場合（基本ありえない）はDBの情報を表示
+                return sanitize($dbFormData[$str]);
+            }
         } else {
-            //ない場合（基本ありえない）はDBの情報を表示
-            return sanitize($dbFormData[$str]);
-        }
-        } else {
-        //POSTにデータがあり、DBの情報と違う場合
-        if(isset($method[$str]) && $method[$str] !== $dbFormData[$str]){
-            return sanitize($method[$str]);
-        } else {
-            return sanitize($dbFormData[$str]);
-        }
+            //POSTにデータがあり、DBの情報と違う場合
+            if(isset($method[$str]) && $method[$str] !== $dbFormData[$str]){
+                return sanitize($method[$str]);
+            } else {
+                return sanitize($dbFormData[$str]);
+            }
         }
     } else {
         if(isset($method[$str])){
-        return sanitize($method[$str]);
+            return sanitize($method[$str]);
         }
     }
 }
 /* サニタイズ */
 function sanitize($value){
     return htmlspecialchars($value, ENT_QUOTES);
+}
+
+/* ページャー */
+function pagination( $currentPageNum, $totalPageNum, $link = '', $pageColNum = 5){
+    // 判定
+    if( $currentPageNum == $totalPageNum && $totalPageNum > $pageColNum){
+        $minPageNum = $currentPageNum - 4;
+        $maxPageNum = $currentPageNum;
+    }elseif( $currentPageNum == ($totalPageNum-1) && $totalPageNum > $pageColNum){
+        $minPageNum = $currentPageNum - 3;
+        $maxPageNum = $currentPageNum + 1;
+    }elseif( $currentPageNum == 2 && $totalPageNum > $pageColNum){
+        $minPageNum = $currentPageNum - 1;
+        $maxPageNum = $currentPageNum + 3;
+    }elseif( $currentPageNum == 1 && $totalPageNum > $pageColNum){
+        $minPageNum = $currentPageNum;
+        $maxPageNum = 5;
+    }elseif($totalPageNum < $pageColNum){
+        $minPageNum = 1;
+        $maxPageNum = $totalPageNum;
+    }else{
+        $minPageNum = $currentPageNum - 2;
+        $maxPageNum = $currentPageNum + 2;
+    }
+    
+    // 出力
+    echo '<div class="c-pager">';
+        if($currentPageNum != 1){
+            echo '<a href="?p=1'.$link.'" class="c-pager__link">&lt;</a>';
+        }
+        for($i = $minPageNum; $i <= $maxPageNum; $i++){
+            if($currentPageNum == $i){
+                echo '<span href="?p='.$i.$link.'" class="c-pager__link is-active">'.$i.'</span>';
+            } else {
+                echo '<a href="?p='.$i.$link.'" class="c-pager__link">'.$i.'</a>';
+            }
+        }
+        if($currentPageNum != $maxPageNum && $maxPageNum > 1){
+            echo '<a href="?p='.$maxPageNum.$link.'" class="c-pager__link">&gt;</a>';
+        }
+    echo '</div>';
 }
