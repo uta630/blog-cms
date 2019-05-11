@@ -42,7 +42,7 @@ define('ERR_MSG_EMAIL_DUP', '入力されたEmailは既に登録されていま�
 define('ERR_MSG_NAME_DUP', '入力された名前は既に登録されています');
 define('ERR_MSG_NAME_DIFF', '名前が違います。');
 define('ERR_MSG_PASS_DIFF', 'パスワードが違います');
-
+define('ERR_MSG_SELECT', '正しくありません');
 
 define('ERR_MSG','エラーが発生しました。しばらく経ってからやり直してください。');
 
@@ -118,6 +118,12 @@ function validNameDup($name){
         $err_msg['common'] = ERR_MSG;
     }
 }
+function validSelect($value, $key){
+    if(!preg_match("/^[0-9]+$/", $value)){
+        global $err_msg;
+        $err_msg[$key] = ERR_MSG_SELECT;
+    }
+}
 
 function dbConnect(){
     $dsn     = "mysql:dbname=blog;host=localhost;charset=utf8";
@@ -172,4 +178,98 @@ function getUser($userID){
     }
 }
 
-?>
+/* 投稿情報取得 */
+function getPost($userID, $postID){
+    debug('投稿情報を取得します。');
+    debug('ユーザID:'.$userID);
+    debug('投稿ID:'.$postID);
+    
+    try {
+        $dbh = dbConnect();
+        $sql = 'SELECT * FROM post WHERE user_id = :userID AND id = :postID AND delete_flg = 0';
+        $data = array(':userID' => $userID, 'postID' => $postID);
+        $stmt = queryPost($dbh, $sql, $data);
+
+        if($stmt){
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } else {
+            return false;
+        }
+    } catch(Exception $e) {
+        error_log('エラー発生:'.$e->getMessage());
+    }
+}
+
+/* カテゴリ取得 */
+function getCategory(){
+    debug('カテゴリー情報を取得します。');
+
+    try {
+        $dbh = dbConnect();
+        $sql = 'SELECT * FROM category';
+        $data = array();
+        $stmt = queryPost($dbh, $sql, $data);
+
+        if($stmt){
+            return $stmt->fetchAll();
+        } else {
+            return false;
+        }
+    } catch(Exception $e) {
+        error_log('エラー発生:'.$e->getMessage());
+    }
+}
+
+/* 画像処理 */
+function uploadImg($file, $key){
+    debug('画像アップロード処理開始');
+    debug('FILE情報:'.print_r($file, true));
+
+    if(isset($file['error']) && is_int($file['error'])){
+        try {
+            // バリデーション
+
+            // ファイルアップロード処理
+
+            return $path;
+        } catch(Exception $e) {
+            debug($e->getMessage());
+            global $err_msg;
+            $err_msg[$key] = $e->getMessage();
+        }
+    }
+}
+
+// 
+function getFormData($str, $flg = false){
+    if($flg){
+        $method = $_GET;
+    }else{
+        $method = $_POST;
+    }
+    global $dbFormData;
+    // ユーザーデータがある場合
+    if(!empty($dbFormData)){
+        //フォームのエラーがある場合
+        if(!empty($err_msg[$str])){
+        //POSTにデータがある場合
+        if(isset($method[$str])){
+            return sanitize($method[$str]);
+        }else{
+            //ない場合（基本ありえない）はDBの情報を表示
+            return sanitize($dbFormData[$str]);
+        }
+        }else{
+        //POSTにデータがあり、DBの情報と違う場合
+        if(isset($method[$str]) && $method[$str] !== $dbFormData[$str]){
+            return sanitize($method[$str]);
+        }else{
+            return sanitize($dbFormData[$str]);
+        }
+        }
+    }else{
+        if(isset($method[$str])){
+        return sanitize($method[$str]);
+        }
+    }
+  }
