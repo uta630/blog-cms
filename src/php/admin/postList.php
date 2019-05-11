@@ -33,7 +33,7 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
         <div class="c-catalog">
             <?php foreach($dbPostData['data'] as $key => $val): ?>
-            <a href="/admin/post.php" class="c-catalog__link"><?php echo sanitize($val['create_date']); ?> <?php echo sanitize($val['title']); ?></a>
+            <a href="/admin/post.php?p_id=<?php echo sanitize($val['id']); ?>" class="c-catalog__link"><?php echo sanitize($val['create_date']); ?> <?php echo sanitize($val['title']); ?></a>
             <?php endforeach; ?>
         </div>
 

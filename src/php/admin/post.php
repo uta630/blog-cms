@@ -11,10 +11,10 @@ $userID = $_SESSION['user_id'];
 $p_id = (!empty($_GET['p_id'])) ? $_GET['p_id'] : '' ;
 $dbFormData = (!empty($p_id)) ? getPost($userID, $p_id) : '' ;
 $edit_flg = (empty($dbFormData)) ? false : true ;
-$dbCategoryData = getCategory();
-debug('商品ID:'.$p_id);
+// $dbCategoryData = getCategory();
+debug('記事ID:'.$p_id);
 debug('フォーム用DBデータ:'.print_r($dbFormData, true));
-debug('カテゴリデータ:'.print_r($dbCategoryData, true));
+// debug('カテゴリデータ:'.print_r($dbCategoryData, true));
 
 // パラメータ改ざんチェック
 if(!empty($p_id) && empty($dbFormData)){
@@ -70,8 +70,19 @@ if(!empty($_POST)){
             $dbh = dbConnect();
             if($edit_flg){
                 debug('DBを更新します。');
-                $sql = 'UPDATE post SET ';
-                $data = array();
+                $sql = 'UPDATE post
+                    SET user_id = :user_id, title = :title, text = :text, category = :category, pic1 = :pic1, pic2 = :pic2, pic3 = :pic3
+                    WHERE user_id = :user_id AND id = :p_id';
+                $data = array(
+                    ':p_id' => $p_id,
+                    ':user_id' => $userID,
+                    ':title' => $title,
+                    ':text' => $text,
+                    ':category' => $category,
+                    ':pic1' => $pic1,
+                    ':pic2' => $pic2,
+                    ':pic3' => $pic3
+                );
             } else {
                 debug('DBに新規登録します。');
                 $sql = 'INSERT INTO
@@ -110,7 +121,7 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 <div class="c-admin-wrap">
     <div class="c-admin c-admin--wide">
-        <h2 class="c-admin__title">新規投稿</h2>
+        <h2 class="c-admin__title"><?php echo (!$edit_flg) ? '新規投稿' : '記事編集'; ?></h2>
 
         <p class="c-form__msg c-form__msg--alert"><?php if(!empty($err_msg['empty'])) echo $err_msg['empty'] ; ?></p>
         <p class="c-form__msg c-form__msg--alert"><?php if(!empty($err_msg['common'])) echo $err_msg['common'] ; ?></p>
@@ -119,13 +130,13 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             <label for="title" class="c-form__label">
                 タイトル
                 <p class="c-form__msg c-form__msg--alert"><?php if(!empty($err_msg['title'])) echo $err_msg['title'] ; ?></p>
-                <input type="text" name="title" id="title" class="c-form__input" value="<?php if(!empty($title)) echo $title ; ?>">
+                <input type="text" name="title" id="title" class="c-form__input" value="<?php echo getFormData('title'); ?>">
             </label>
             
             <label for="text" class="c-form__label">
                 本文
                 <p class="c-form__msg c-form__msg--alert"><?php if(!empty($err_msg['text'])) echo $err_msg['text'] ; ?></p>
-                <textarea name="text" id="text" class="c-form__input c-form__textarea c-input"><?php if(!empty($text)) echo $text ; ?></textarea>
+                <textarea name="text" id="text" class="c-form__input c-form__textarea c-input"><?php echo getFormData('text'); ?></textarea>
             </label>
             
             <div class="c-form__label">
