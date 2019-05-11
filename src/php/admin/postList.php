@@ -1,3 +1,13 @@
+<?php
+require('function.php');
+debug('「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「');
+debug('「　投稿一覧ページ');
+debug('「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「');
+require('auth.php');
+
+$getPostData = getPostList();
+?>
+
 <?php include('./common/head.php'); ?>
 
 <div class="c-admin-wrap">
@@ -9,12 +19,9 @@
         </div>
 
         <div class="c-catalog">
-            <a href="/admin/post.php" class="c-catalog__link">2019.3.31 ブログタイトルブログタイトルブログタイトルブログタイトルブログタイトルブログタイトルブログタイトルブログタイトル</a>
-            <a href="/admin/post.php" class="c-catalog__link">2019.3.31 ブログタイトル</a>
-            <a href="/admin/post.php" class="c-catalog__link">2019.3.31 ブログタイトル</a>
-            <a href="/admin/post.php" class="c-catalog__link">2019.3.31 ブログタイトル</a>
-            <a href="/admin/post.php" class="c-catalog__link">2019.3.31 ブログタイトル</a>
-            <a href="/admin/post.php" class="c-catalog__link">2019.3.31 ブログタイトル</a>
+            <?php foreach($getPostData as $key => $val): ?>
+            <a href="/admin/post.php" class="c-catalog__link"><?php echo sanitize($val['create_date']); ?> <?php echo sanitize($val['title']); ?></a>
+            <?php endforeach; ?>
         </div>
 
         <div class="c-catalog__btn">

@@ -178,6 +178,38 @@ function getUser($userID){
     }
 }
 
+/* 投稿全体の情報取得 */
+function getPostList($currentMinNum = 0, $span = 20){
+    debug('投稿全体の情報を取得します。');
+    
+    try {
+        // DBの記事idを取得する
+        $dbh = dbConnect();
+        $sql = 'SELECT id FROM post';
+        $data = array();
+        $stmt = queryPost($dbh, $sql, $data);
+
+        if(!$stmt){
+            return false;
+        }
+
+        // 取得したidから表示したい分だけ拾って出力する
+        $sql = 'SELECT * FROM post';
+        $sql .= ' LIMIT '.$span.' OFFSET '.$currentMinNum;
+        $data = array();
+        debug('SQL：'.$sql);
+        $stmt = queryPost($dbh, $sql, $data);
+
+        if($stmt){
+            return $stmt->fetchAll();
+        } else {
+            return false;
+        }
+    } catch(Exception $e) {
+        error_log('エラー発生:'.$e->getMessage());
+    }
+}
+
 /* 投稿情報取得 */
 function getPost($userID, $postID){
     debug('投稿情報を取得します。');
@@ -240,11 +272,11 @@ function uploadImg($file, $key){
     }
 }
 
-// 
+// フォームの入力保持
 function getFormData($str, $flg = false){
     if($flg){
         $method = $_GET;
-    }else{
+    } else {
         $method = $_POST;
     }
     global $dbFormData;
@@ -255,21 +287,25 @@ function getFormData($str, $flg = false){
         //POSTにデータがある場合
         if(isset($method[$str])){
             return sanitize($method[$str]);
-        }else{
+        } else {
             //ない場合（基本ありえない）はDBの情報を表示
             return sanitize($dbFormData[$str]);
         }
-        }else{
+        } else {
         //POSTにデータがあり、DBの情報と違う場合
         if(isset($method[$str]) && $method[$str] !== $dbFormData[$str]){
             return sanitize($method[$str]);
-        }else{
+        } else {
             return sanitize($dbFormData[$str]);
         }
         }
-    }else{
+    } else {
         if(isset($method[$str])){
         return sanitize($method[$str]);
         }
     }
-  }
+}
+/* サニタイズ */
+function sanitize($value){
+    return htmlspecialchars($value, ENT_QUOTES);
+}
