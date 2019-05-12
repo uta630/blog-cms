@@ -37,4 +37,8 @@ $(function(){
             };
             fileReader.readAsDataURL(file);
         });
+
+    $(document).on('click', '.js-thumb-remove', function(e){
+        $(this).siblings('label').find('img').attr('src', '');
+    });
 });

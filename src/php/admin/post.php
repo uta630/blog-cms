@@ -1,7 +1,7 @@
 <?php
 require('function.php');
 debug('「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「');
-debug('「　商品出品登録ページ　');
+debug('「　記事登録ページ　');
 debug('「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「');
 debugLogStart();
 require('auth.php');
@@ -108,6 +108,7 @@ if(!empty($_POST)){
             $stmt = queryPost($dbh, $sql, $data);
 
             if($stmt){
+                $_SESSION['msg_success'] = '記事を登録しました。';
                 debug('マイページへ遷移します。');
                 header('Location:postList.php');
             }
@@ -129,7 +130,7 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         <p class="c-form__msg c-form__msg--alert"><?php if(!empty($err_msg['empty'])) echo $err_msg['empty'] ; ?></p>
         <p class="c-form__msg c-form__msg--alert"><?php if(!empty($err_msg['common'])) echo $err_msg['common'] ; ?></p>
 
-        <form method="post" class="c-form">
+        <form method="post" enctype="multipart/form-data" class="c-form">
             <div class="c-form__label c-form__release">
                 <label>
                     <input type="radio" name="status" value="private" <?php if('private' === getFormData('status')){ echo 'checked'; } ?> class="c-form__state">
@@ -168,21 +169,30 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             <div class="c-form__label">
                 画像選択
                 <div class="c-form__images">
-                    <label class="c-form__thumb-wrap">
-                        <input type="hidden" name="MAX_FILE_SIZE" value="3145728">
-                        <input type="file" name="pic1" class="c-form__thumb js-post-image">
-                        <img src="" class="c-form__thumb--prev">
-                    </label>
-                    <label class="c-form__thumb-wrap">
-                        <input type="hidden" name="MAX_FILE_SIZE" value="3145728">
-                        <input type="file" name="pic2" class="c-form__thumb js-post-image">
-                        <img src="" class="c-form__thumb--prev">
-                    </label>
-                    <label class="c-form__thumb-wrap">
-                        <input type="hidden" name="MAX_FILE_SIZE" value="3145728">
-                        <input type="file" name="pic3" class="c-form__thumb js-post-image">
-                        <img src="" class="c-form__thumb--prev">
-                    </label>
+                    <div class="c-form__image">
+                        <label class="c-form__thumb-wrap">
+                            <input type="hidden" name="MAX_FILE_SIZE" value="3145728">
+                            <input type="file" name="pic1" class="c-form__thumb js-post-image">
+                            <img src="<?php echo getFormData('pic1'); ?>" class="c-form__thumb--prev">
+                        </label>
+                        <div class="c-form__thumb--remove js-thumb-remove">削除</div>
+                    </div>
+                    <div class="c-form__image">
+                        <label class="c-form__thumb-wrap">
+                            <input type="hidden" name="MAX_FILE_SIZE" value="3145728">
+                            <input type="file" name="pic2" class="c-form__thumb js-post-image">
+                            <img src="<?php echo getFormData('pic2'); ?>" class="c-form__thumb--prev">
+                        </label>
+                        <div class="c-form__thumb--remove js-thumb-remove">削除</div>
+                    </div>
+                    <div class="c-form__image">
+                        <label class="c-form__thumb-wrap">
+                            <input type="hidden" name="MAX_FILE_SIZE" value="3145728">
+                            <input type="file" name="pic3" class="c-form__thumb js-post-image">
+                            <img src="<?php echo getFormData('pic3'); ?>" class="c-form__thumb--prev">
+                        </label>
+                        <div class="c-form__thumb--remove js-thumb-remove">削除</div>
+                    </div>
                 </div>
             </div>
 

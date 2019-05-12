@@ -31,6 +31,13 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
         <?php pagination($currentPageNum, $dbPostData['total_page']); ?>
 
+        <?php if(!empty($_SESSION['msg_success'])){ ?>
+            <p><?php echo $_SESSION['msg_success']; ?></p>
+        <?php 
+                $_SESSION['msg_success'] = '' ;
+            }
+        ?>
+
         <div class="c-catalog">
             <?php foreach($dbPostData['data'] as $key => $val): ?>
             <a href="/admin/post.php?p_id=<?php echo sanitize($val['id']); ?>" class="c-catalog__link">
