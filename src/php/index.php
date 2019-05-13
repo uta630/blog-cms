@@ -1,3 +1,19 @@
+<?php
+require('admin/function.php');
+$currentPageNum = (!empty($_GET['p'])) ? $_GET['p'] : 1 ;
+if(!is_numeric($currentPageNum)){
+    error_log('エラー発生:指定ページに不正なアクセスがありました。');
+    header('Location:index.php');
+}
+$listSpan = 10;
+$currentMinNum = (($currentPageNum - 1) * $listSpan);
+$dbPostData = getPostList($currentMinNum, $listSpan);
+$dbCategory = getCategory();
+if(empty($dbPostData['data'])){
+    error_log('エラー発生:データがありませんでした。');
+    header('Location:index.php');
+}
+?>
 <?php include('./common/head.php'); ?>
 
 <div class="c-hero">
@@ -6,47 +22,27 @@
 
 <div class="c-main">
     <div class="c-primary">
+        <?php
+            foreach($dbPostData['data'] as $key => $val):
+                if($val['status'] === 'publish'){
+        ?>
         <div class="c-post">
             <div class="c-post__heading">
-                <p class="c-post__date">2019/12/31 <i class="c-post__category">カテゴリ１</i></p>
-                <h2 class="c-post__title">ブログのタイトルがここに入ります。</h2>
+                <p class="c-post__date"><?php echo date('Y/m/d',  strtotime($val['create_date'])); ?> <i class="c-post__category"><?php echo $dbCategory[$val['category']-1]['catname'] ;?></i></p>
+                <h2 class="c-post__title"><?php echo sanitize($val['title']); ?></h2>
             </div>
 
             <div class="c-post__contents">
                 <p class="c-post__text">
-                    ブログ本文がここに入ります。
+                    <?php echo mb_substr(sanitize($val['text']), 0, 86); ?>…
                     <a href="/article.php" class="c-post__more">続きを読む</a>
                 </p>
             </div>
         </div>
-
-        <div class="c-post">
-            <div class="c-post__heading">
-                <p class="c-post__date">2019/12/31 <i class="c-post__category">カテゴリ１</i></p>
-                <h2 class="c-post__title">ブログのタイトルがここに入ります。</h2>
-            </div>
-
-            <div class="c-post__contents">
-                <p class="c-post__text">
-                    ブログ本文がここに入ります。
-                    <a href="/article.php" class="c-post__more">続きを読む</a>
-                </p>
-            </div>
-        </div>
-
-        <div class="c-post">
-            <div class="c-post__heading">
-                <p class="c-post__date">2019/12/31 <i class="c-post__category">カテゴリ１</i></p>
-                <h2 class="c-post__title">ブログのタイトルがここに入ります。</h2>
-            </div>
-
-            <div class="c-post__contents">
-                <p class="c-post__text">
-                    ブログ本文がここに入ります。
-                    <a href="/article.php" class="c-post__more">続きを読む</a>
-                </p>
-            </div>
-        </div>
+        <?php
+            }   
+            endforeach;
+        ?>
     </div>
 
     <?php include('./common/sidebar.php'); ?>
