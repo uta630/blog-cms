@@ -157,12 +157,23 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             <div class="c-form__label">
                 カテゴリ
                 <div class="c-form__category">
-                    <select name="category" class="c-form__select">
+                    <select name="category" class="c-form__select js-select-cat">
                         <option value="0">選択してください</option>
                         <?php foreach($dbCategoryData as $key => $val): ?>
                         <option value="<?php echo sanitize($val['id']); ?>" <?php if(sanitize($val['id']) === $dbFormData['category']){ echo 'selected'; } ?>><?php echo sanitize($val['catname']); ?></option>
                         <?php endforeach; ?>
                     </select>
+
+                    <i class="c-form__add c-form__add--cat js-modal-open" aria-hidden="true"></i>
+                </div>
+            </div>
+
+            <div class="c-modal js-modal">
+                <div class="c-modal__body">
+                    カテゴリーを追加する
+                    <input type="text" name="cat" class="c-modal__input c-form__input js-cat-name">
+                    <a href="javascript:void(0);" class="c-modal__btn c-btn c-btn js-modal-close">閉じる</a>
+                    <a href="javascript:void(0);" class="c-modal__btn c-btn c-btn--blue js-cat-add">追加</a>
                 </div>
             </div>
 
