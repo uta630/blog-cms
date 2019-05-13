@@ -1,5 +1,10 @@
 <?php
 require('admin/function.php');
+debug('「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「');
+debug('「　TOPページ');
+debug('「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「');
+debugLogStart();
+
 $currentPageNum = (!empty($_GET['p'])) ? $_GET['p'] : 1 ;
 if(!is_numeric($currentPageNum)){
     error_log('エラー発生:指定ページに不正なアクセスがありました。');
@@ -35,7 +40,7 @@ if(empty($dbPostData['data'])){
             <div class="c-post__contents">
                 <p class="c-post__text">
                     <?php echo mb_substr(sanitize($val['text']), 0, 86); ?>…
-                    <a href="/article.php" class="c-post__more">続きを読む</a>
+                    <a href="/article.php?p_id=<?php echo $val['id']; ?>" class="c-post__more">続きを読む</a>
                 </p>
             </div>
         </div>

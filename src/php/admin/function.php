@@ -252,6 +252,26 @@ function getPost($userID, $postID){
         error_log('エラー発生:'.$e->getMessage());
     }
 }
+/* 投稿情報表示 */
+function showPost($postID){
+    debug('投稿情報を取得します。');
+    debug('投稿ID:'.$postID);
+    
+    try {
+        $dbh = dbConnect();
+        $sql = 'SELECT * FROM post WHERE id = :postID AND delete_flg = 0';
+        $data = array('postID' => $postID);
+        $stmt = queryPost($dbh, $sql, $data);
+
+        if($stmt){
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } else {
+            return false;
+        }
+    } catch(Exception $e) {
+        error_log('エラー発生:'.$e->getMessage());
+    }
+}
 
 /* カテゴリ取得 */
 function getCategory(){
