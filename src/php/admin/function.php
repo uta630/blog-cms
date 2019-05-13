@@ -18,6 +18,24 @@ function debug($value){
     }
 }
 
+/* ログイン認証 */
+function isLogin(){
+    if(!empty($_SESSION['login_date'])){
+        debug('ログイン済みユーザーです。');
+        if( ($_SESSION['login_date'] + $_SESSION['login_limit']) < time()){
+            debug('ログイン有効期限オーバーです。');
+            session_destroy();
+            return false;
+        }else{
+            debug('ログイン有効期限以内です。');
+            return true;
+        }
+        }else{
+            debug('未ログインユーザーです。');
+            return false;
+        }
+    }
+
 function debugLogStart(){
     debug('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 画面表示処理開始');
     debug('セッションID:'.session_id());
@@ -263,11 +281,38 @@ function uploadImg($file, $key){
     if(isset($file['error']) && is_int($file['error'])){
         try {
             // バリデーション
+            switch($file['error']){
+                case UPLOAD_ERR_OK:
+                    break;
+                case UPLOAD_ERR_NO_FILE:
+                    throw new RuntimeException('ファイルが選択されていません。');
+                case UPLOAD_ERR_INI_SIZE:
+                case UPLOAD_ERR_FORM_SIZE:
+                    throw new RuntimeException('ファイルサイズが大きすぎます。');
+                default:
+                    throw new RuntimeException('その他のエラーが発生しました。');
+            }
 
-            // ファイルアップロード処理
+            // MIMEタイプチェック
+            $type = @exif_imagetype($file['tmp_name']);
+            if(!in_array($type, [IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG], true)){
+                throw new RuntimeException('画像形式が未対応です。');
+            }
+
+            // ファイル名の重複回避
+            $path = 'uploads/'.sha1_file($file['tmp_name']).image_type_to_extension($type);
+            if(!move_uploaded_file($file['tmp_name'], $path)){
+                throw new RuntimeException('ファイル保存時にエラーが発生しました。');
+            }
+
+            // 保存したファイルパスのパーミッション(権限)変更
+            chmod($path, 0644);
+
+            debug('ファイルは正常にアップロードされました。');
+            debug('ファイルパス:'.$path);
 
             return $path;
-        } catch(Exception $e) {
+        } catch(RuntimeException $e) {
             debug($e->getMessage());
             global $err_msg;
             $err_msg[$key] = $e->getMessage();
