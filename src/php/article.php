@@ -40,12 +40,10 @@ if(empty($p_id )){
                         <?php if(!empty($dbFormData['pic2'])){ ?><img src="/admin/<?php echo $dbFormData['pic2']; ?>" alt="" class="c-post__thumb"><?php } ?>
                         <?php if(!empty($dbFormData['pic3'])){ ?><img src="/admin/<?php echo $dbFormData['pic3']; ?>" alt="" class="c-post__thumb"><?php } ?>
                     </div>
-                    <i class="c-post__icon c-post__icon--prev"></i>
-                    <i class="c-post__icon c-post__icon--next"></i>
                 </div>
                 <?php } ?>
 
-                <p class="c-post__text"><?php echo $dbFormData['text']; ?></p>
+                <p class="c-post__text c-post__text--pre"><?php echo $dbFormData['text']; ?></p>
             </div>
         </div>
     </div>

@@ -43,7 +43,7 @@ if(empty($dbPostData['data'])){
 
             <div class="c-post__contents">
                 <p class="c-post__text">
-                    <?php echo mb_substr(sanitize($val['text']), 0, 86); ?>…
+                    <?php echo mb_substr(sanitize($val['text']), 0, 126); ?>…
                     <a href="/article.php?p_id=<?php echo $val['id']; ?>" class="c-post__more">続きを読む</a>
                 </p>
             </div>
