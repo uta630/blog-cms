@@ -1,3 +1,29 @@
+<?php
+require('admin/function.php');
+debug('「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「');
+debug('「　TOPページ');
+debug('「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「');
+debugLogStart();
+
+/* ページャー */
+$currentPageNum = (!empty($_GET['p'])) ? $_GET['p'] : 1 ;
+if(!is_numeric($currentPageNum)){
+    error_log('エラー発生:指定ページに不正なアクセスがありました。');
+    header('Location:index.php');
+}
+$listSpan = 6;
+$currentMinNum = (($currentPageNum - 1) * $listSpan);
+/* 記事 */
+$categoryType = (!empty($_GET['cat'])) ? $_GET['cat'] : '' ;
+$dbPostData = getPublishPostList($currentMinNum, $listSpan, $categoryType);
+/* カテゴリ */
+$dbCategory = getCategory();
+/* デバッグ */
+if(empty($dbPostData['data'])){
+    error_log('エラー発生:データがありませんでした。');
+    header('Location:index.php');
+}
+?>
 <?php include('./common/head.php'); ?>
 
 <div class="c-hero">
@@ -6,47 +32,27 @@
 
 <div class="c-main">
     <div class="c-primary">
+        <?php
+            foreach($dbPostData['data'] as $key => $val):
+        ?>
         <div class="c-post">
             <div class="c-post__heading">
-                <p class="c-post__date">2019/12/31 <i class="c-post__category">カテゴリ１</i></p>
-                <h2 class="c-post__title">ブログのタイトルがここに入ります。</h2>
+                <p class="c-post__date"><?php echo date('Y/m/d',  strtotime($val['create_date'])); ?> <i class="c-post__category"><?php echo $dbCategory[$val['category']-1]['catname'] ;?></i></p>
+                <h2 class="c-post__title"><?php echo sanitize($val['title']); ?></h2>
             </div>
 
             <div class="c-post__contents">
                 <p class="c-post__text">
-                    ブログ本文がここに入ります。
-                    <a href="/article.php" class="c-post__more">続きを読む</a>
+                    <?php echo mb_substr(sanitize($val['text']), 0, 126); ?>…
+                    <a href="/article.php?p_id=<?php echo $val['id']; ?>" class="c-post__more">続きを読む</a>
                 </p>
             </div>
         </div>
+        <?php
+            endforeach;
+        ?>
 
-        <div class="c-post">
-            <div class="c-post__heading">
-                <p class="c-post__date">2019/12/31 <i class="c-post__category">カテゴリ１</i></p>
-                <h2 class="c-post__title">ブログのタイトルがここに入ります。</h2>
-            </div>
-
-            <div class="c-post__contents">
-                <p class="c-post__text">
-                    ブログ本文がここに入ります。
-                    <a href="/article.php" class="c-post__more">続きを読む</a>
-                </p>
-            </div>
-        </div>
-
-        <div class="c-post">
-            <div class="c-post__heading">
-                <p class="c-post__date">2019/12/31 <i class="c-post__category">カテゴリ１</i></p>
-                <h2 class="c-post__title">ブログのタイトルがここに入ります。</h2>
-            </div>
-
-            <div class="c-post__contents">
-                <p class="c-post__text">
-                    ブログ本文がここに入ります。
-                    <a href="/article.php" class="c-post__more">続きを読む</a>
-                </p>
-            </div>
-        </div>
+        <?php pagination($currentPageNum, $dbPostData['total_page']); ?>
     </div>
 
     <?php include('./common/sidebar.php'); ?>

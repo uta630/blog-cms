@@ -231,6 +231,52 @@ function getPostList($currentMinNum = 1, $span = 20){
     }
 }
 
+/* 投稿全体の公開記事だけ情報取得 */
+function getPublishPostList($currentMinNum = 1, $span = 20, $category = ''){
+    debug('投稿全体の情報を取得します。');
+    
+    try {
+        // DBの記事idを取得する
+        $dbh = dbConnect();
+        if(empty($category)){
+            $sql = 'SELECT id FROM post WHERE status = :status AND type = :type';
+            $data = array(':status' => 'publish', ':type' => 'post');
+        } else {
+            $sql = 'SELECT id FROM post WHERE status = :status AND type = :type AND category = :category';
+            $data = array(':status' => 'publish', ':type' => 'post', 'category' => $category);
+        }
+
+        $stmt = queryPost($dbh, $sql, $data);
+        
+        $result['total'] = $stmt->rowCount();
+        $result['total_page'] = ceil($result['total'] / $span);
+        if(!$stmt){
+            return false;
+        }
+
+        // 取得したidから表示したい分だけ拾って出力する
+        if(empty($category)){
+            $sql = 'SELECT * FROM post WHERE status = :status AND type = :type';
+            $data = array(':status' => 'publish', ':type' => 'post');
+        } else {
+            $sql = 'SELECT * FROM post WHERE status = :status AND type = :type AND category = :category';
+            $data = array(':status' => 'publish', ':type' => 'post', 'category' => $category);
+        }
+        $sql .= ' LIMIT '.$span.' OFFSET '.$currentMinNum;
+        debug('SQL：'.$sql);
+        $stmt = queryPost($dbh, $sql, $data);
+
+        if($stmt){
+            $result['data'] = $stmt->fetchAll();
+            return $result;
+        } else {
+            return false;
+        }
+    } catch(Exception $e) {
+        error_log('エラー発生:'.$e->getMessage());
+    }
+}
+
 /* 投稿情報取得 */
 function getPost($userID, $postID){
     debug('投稿情報を取得します。');
@@ -241,6 +287,26 @@ function getPost($userID, $postID){
         $dbh = dbConnect();
         $sql = 'SELECT * FROM post WHERE user_id = :userID AND id = :postID AND delete_flg = 0';
         $data = array(':userID' => $userID, 'postID' => $postID);
+        $stmt = queryPost($dbh, $sql, $data);
+
+        if($stmt){
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } else {
+            return false;
+        }
+    } catch(Exception $e) {
+        error_log('エラー発生:'.$e->getMessage());
+    }
+}
+/* 投稿情報表示 */
+function showPost($postID){
+    debug('投稿情報を取得します。');
+    debug('投稿ID:'.$postID);
+    
+    try {
+        $dbh = dbConnect();
+        $sql = 'SELECT * FROM post WHERE id = :postID AND delete_flg = 0';
+        $data = array('postID' => $postID);
         $stmt = queryPost($dbh, $sql, $data);
 
         if($stmt){

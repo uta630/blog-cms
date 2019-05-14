@@ -17,9 +17,15 @@
             <h4 class="c-list__title">カテゴリ一覧</h4>
 
             <div class="c-list__contents">
-                <a href="/" class="c-list__link">カテゴリ１</a>
-                <a href="/" class="c-list__link">カテゴリ２</a>
-                <a href="/" class="c-list__link">カテゴリ３</a>
+                <?php
+                    foreach($dbCategory as $key => $cat):
+                        if(!$cat['delete_flg']){
+                ?>
+                    <a href="/?cat=<?php echo $cat['id']; ?>" class="c-list__link"><?php echo $cat['catname']; ?></a>
+                <?php
+                        }
+                    endforeach;
+                ?>
             </div>
         </div>
     </div>
