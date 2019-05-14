@@ -33,15 +33,17 @@ if(empty($p_id )){
             </div>
 
             <div class="c-post__contents">
+                <?php if((!empty($dbFormData['pic1'])) || (!empty($dbFormData['pic2'])) || (!empty($dbFormData['pic2']))){ ?>
                 <div class="c-post__images">
                     <div class="js-bxslider">
-                        <img src="/images/default0.png" alt="" class="c-post__thumb">
-                        <img src="/images/default1.png" alt="" class="c-post__thumb">
-                        <img src="/images/default2.png" alt="" class="c-post__thumb">
+                        <?php if(!empty($dbFormData['pic1'])){ ?><img src="/admin/<?php echo $dbFormData['pic1']; ?>" alt="" class="c-post__thumb"><?php } ?>
+                        <?php if(!empty($dbFormData['pic2'])){ ?><img src="/admin/<?php echo $dbFormData['pic2']; ?>" alt="" class="c-post__thumb"><?php } ?>
+                        <?php if(!empty($dbFormData['pic3'])){ ?><img src="/admin/<?php echo $dbFormData['pic3']; ?>" alt="" class="c-post__thumb"><?php } ?>
                     </div>
                     <i class="c-post__icon c-post__icon--prev"></i>
                     <i class="c-post__icon c-post__icon--next"></i>
                 </div>
+                <?php } ?>
 
                 <p class="c-post__text"><?php echo $dbFormData['text']; ?></p>
             </div>
