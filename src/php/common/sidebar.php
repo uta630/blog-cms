@@ -21,7 +21,7 @@
                     foreach($dbCategory as $key => $cat):
                         if(!$cat['delete_flg']){
                 ?>
-                    <a href="/" class="c-list__link"><?php echo $cat['catname']; ?></a>
+                    <a href="/?cat=<?php echo $cat['id']; ?>" class="c-list__link"><?php echo $cat['catname']; ?></a>
                 <?php
                         }
                     endforeach;

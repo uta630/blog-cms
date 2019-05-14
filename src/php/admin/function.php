@@ -232,14 +232,20 @@ function getPostList($currentMinNum = 1, $span = 20){
 }
 
 /* 投稿全体の公開記事だけ情報取得 */
-function getPublishPostList($currentMinNum = 1, $span = 20){
+function getPublishPostList($currentMinNum = 1, $span = 20, $category = ''){
     debug('投稿全体の情報を取得します。');
     
     try {
         // DBの記事idを取得する
         $dbh = dbConnect();
-        $sql = 'SELECT id FROM post WHERE status = :status AND  type = :type';
-        $data = array(':status' => 'publish', ':type' => 'post');
+        if(empty($category)){
+            $sql = 'SELECT id FROM post WHERE status = :status AND type = :type';
+            $data = array(':status' => 'publish', ':type' => 'post');
+        } else {
+            $sql = 'SELECT id FROM post WHERE status = :status AND type = :type AND category = :category';
+            $data = array(':status' => 'publish', ':type' => 'post', 'category' => $category);
+        }
+
         $stmt = queryPost($dbh, $sql, $data);
         
         $result['total'] = $stmt->rowCount();
@@ -249,9 +255,14 @@ function getPublishPostList($currentMinNum = 1, $span = 20){
         }
 
         // 取得したidから表示したい分だけ拾って出力する
-        $sql = 'SELECT * FROM post WHERE status = :status AND  type = :type';
+        if(empty($category)){
+            $sql = 'SELECT * FROM post WHERE status = :status AND type = :type';
+            $data = array(':status' => 'publish', ':type' => 'post');
+        } else {
+            $sql = 'SELECT * FROM post WHERE status = :status AND type = :type AND category = :category';
+            $data = array(':status' => 'publish', ':type' => 'post', 'category' => $category);
+        }
         $sql .= ' LIMIT '.$span.' OFFSET '.$currentMinNum;
-        $data = array(':status' => 'publish', ':type' => 'post');
         debug('SQL：'.$sql);
         $stmt = queryPost($dbh, $sql, $data);
 

@@ -5,15 +5,20 @@ debug('「　TOPページ');
 debug('「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「');
 debugLogStart();
 
+/* ページャー */
 $currentPageNum = (!empty($_GET['p'])) ? $_GET['p'] : 1 ;
 if(!is_numeric($currentPageNum)){
     error_log('エラー発生:指定ページに不正なアクセスがありました。');
     header('Location:index.php');
 }
-$listSpan = 2;
+$listSpan = 6;
 $currentMinNum = (($currentPageNum - 1) * $listSpan);
-$dbPostData = getPublishPostList($currentMinNum, $listSpan);
+/* 記事 */
+$categoryType = (!empty($_GET['cat'])) ? $_GET['cat'] : '' ;
+$dbPostData = getPublishPostList($currentMinNum, $listSpan, $categoryType);
+/* カテゴリ */
 $dbCategory = getCategory();
+/* デバッグ */
 if(empty($dbPostData['data'])){
     error_log('エラー発生:データがありませんでした。');
     header('Location:index.php');
