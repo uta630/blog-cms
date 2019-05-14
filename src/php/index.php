@@ -10,9 +10,9 @@ if(!is_numeric($currentPageNum)){
     error_log('エラー発生:指定ページに不正なアクセスがありました。');
     header('Location:index.php');
 }
-$listSpan = 10;
+$listSpan = 2;
 $currentMinNum = (($currentPageNum - 1) * $listSpan);
-$dbPostData = getPostList($currentMinNum, $listSpan);
+$dbPostData = getPublishPostList($currentMinNum, $listSpan);
 $dbCategory = getCategory();
 if(empty($dbPostData['data'])){
     error_log('エラー発生:データがありませんでした。');
@@ -29,7 +29,6 @@ if(empty($dbPostData['data'])){
     <div class="c-primary">
         <?php
             foreach($dbPostData['data'] as $key => $val):
-                if($val['status'] === 'publish'){
         ?>
         <div class="c-post">
             <div class="c-post__heading">
@@ -45,9 +44,10 @@ if(empty($dbPostData['data'])){
             </div>
         </div>
         <?php
-            }   
             endforeach;
         ?>
+
+        <?php pagination($currentPageNum, $dbPostData['total_page']); ?>
     </div>
 
     <?php include('./common/sidebar.php'); ?>

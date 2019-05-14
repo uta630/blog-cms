@@ -231,6 +231,41 @@ function getPostList($currentMinNum = 1, $span = 20){
     }
 }
 
+/* 投稿全体の公開記事だけ情報取得 */
+function getPublishPostList($currentMinNum = 1, $span = 20){
+    debug('投稿全体の情報を取得します。');
+    
+    try {
+        // DBの記事idを取得する
+        $dbh = dbConnect();
+        $sql = 'SELECT id FROM post WHERE status = :status AND  type = :type';
+        $data = array(':status' => 'publish', ':type' => 'post');
+        $stmt = queryPost($dbh, $sql, $data);
+        
+        $result['total'] = $stmt->rowCount();
+        $result['total_page'] = ceil($result['total'] / $span);
+        if(!$stmt){
+            return false;
+        }
+
+        // 取得したidから表示したい分だけ拾って出力する
+        $sql = 'SELECT * FROM post WHERE status = :status AND  type = :type';
+        $sql .= ' LIMIT '.$span.' OFFSET '.$currentMinNum;
+        $data = array(':status' => 'publish', ':type' => 'post');
+        debug('SQL：'.$sql);
+        $stmt = queryPost($dbh, $sql, $data);
+
+        if($stmt){
+            $result['data'] = $stmt->fetchAll();
+            return $result;
+        } else {
+            return false;
+        }
+    } catch(Exception $e) {
+        error_log('エラー発生:'.$e->getMessage());
+    }
+}
+
 /* 投稿情報取得 */
 function getPost($userID, $postID){
     debug('投稿情報を取得します。');
