@@ -38,11 +38,14 @@ if(!empty($_POST)){
     $pic1 = ( !empty($_FILES['pic1']['name']) ) ? uploadImg($_FILES['pic1'], 'pic1') : '' ;
     $pic2 = ( !empty($_FILES['pic2']['name']) ) ? uploadImg($_FILES['pic2'], 'pic2') : '' ;
     $pic3 = ( !empty($_FILES['pic3']['name']) ) ? uploadImg($_FILES['pic3'], 'pic3') : '' ;
+    debug('$pic1:'.$pic1);
+    
     // 画像登録していないがすでに登録されている場合にDBのパスを入れておく
     $pic1 = ( empty($pic1) && !empty($dbFormData['pic1']) ) ? $dbFormData['pic1'] : $pic1 ;
     $pic2 = ( empty($pic2) && !empty($dbFormData['pic2']) ) ? $dbFormData['pic2'] : $pic2 ;
     $pic3 = ( empty($pic3) && !empty($dbFormData['pic3']) ) ? $dbFormData['pic3'] : $pic3 ;
-
+    debug('$pic1:'.$pic1);
+    
     if(empty($dbFormData)){
         // 投稿バリデーション
         validRequired($title, 'empty');
@@ -133,7 +136,7 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         <form method="post" enctype="multipart/form-data" class="c-form">
             <div class="c-form__label c-form__release">
                 <label>
-                    <input type="radio" name="status" value="private" <?php if('private' === getFormData('status')){ echo 'checked'; } ?> class="c-form__state">
+                    <input type="radio" name="status" value="private" <?php if('private' === getFormData('status') || empty($p_id)){ echo 'checked'; } ?> class="c-form__state">
                     非公開
                 </label>
                 <label>
@@ -160,7 +163,7 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                     <select name="category" class="c-form__select js-select-cat">
                         <option value="0">選択してください</option>
                         <?php foreach($dbCategoryData as $key => $val): ?>
-                        <option value="<?php echo sanitize($val['id']); ?>" <?php if(sanitize($val['id']) === $dbFormData['category']){ echo 'selected'; } ?>><?php echo sanitize($val['catname']); ?></option>
+                        <option value="<?php echo sanitize($val['id']); ?>" <?php if(!empty($dbFormData) && sanitize($val['id']) === $dbFormData['category']){ echo 'selected'; } ?>><?php echo sanitize($val['catname']); ?></option>
                         <?php endforeach; ?>
                     </select>
 
