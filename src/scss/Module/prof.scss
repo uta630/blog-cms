@@ -5,4 +5,18 @@
     &__thumb {
         margin-bottom: 12px;
     }
+
+    &__name {
+        margin-bottom: 6px;
+        padding-bottom: 6px;
+
+        text-align: center;
+        font-size: 16px;
+
+        border-bottom: 1px dotted #333;
+    }
+
+    &__intro {
+        line-height: 1.6;
+    }
 }

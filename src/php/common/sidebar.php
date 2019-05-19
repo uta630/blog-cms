@@ -1,8 +1,8 @@
 <div class="c-sidebar">
     <div class="c-sidebar__section c-prof">
         <img src="/images/default.jpg" alt="" class="c-prof__thumb">
-        <p class="c-prof__name">名前</p>
-        <p class="c-prof__intro">簡単な紹介文</p>
+        <p class="c-prof__name">うた＠ウェブカツ!!</p>
+        <p class="c-prof__intro">雑魚ーダー/ 名ばかりのフロントエンドエンジニア / 2018.12.11 ~ #ウェブカツ 奮闘中 / 目指すは「会社員 x フリーランス」 / 頑張る</p>
     </div>
 
     <div class="c-sidebar__section">
@@ -35,6 +35,7 @@
             <h4 class="c-list__title">リンク</h4>
 
             <div class="c-list__contents">
+                <a href="/" class="c-list__link">TOP</a>
                 <a href="/contact.php" class="c-list__link">お問い合わせ</a>
                 <a href="https://twitter.com/____uta_____" class="c-list__link">Twitter</a>
             </div>

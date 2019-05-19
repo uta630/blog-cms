@@ -1,8 +1,6 @@
 <?php include('./common/head.php'); ?>
 
-<div class="c-hero">
-    <h1 class="c-hero__title">SITE TITLE</h1>
-</div>
+<?php include('./common/header.php'); ?>
 
 <div class="c-main">
     <div class="c-primary c-contact">
