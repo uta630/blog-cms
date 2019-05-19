@@ -30,7 +30,7 @@ if(empty($dbPostData['data']) && $dbPostData['noindex'] == false){
 <?php include('./common/head.php'); ?>
 
 <div class="c-hero">
-    <h1 class="c-hero__title">SITE TITLE</h1>
+    <h1 class="c-hero__title"><a href="/" class="c-hero__link">SITE TITLE</a></h1>
 </div>
 
 <div class="c-main">
