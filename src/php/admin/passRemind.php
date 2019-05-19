@@ -22,8 +22,8 @@ if(!empty($_POST)){
 
             try {
                 $dbh = dbConnect();
-                $sql = 'SELECT count(*) FROM users WHERE email = :email AND delete_flg = 0';
-                $data = array(':email' => $email);
+                $sql = 'SELECT count(*) FROM users WHERE id = :id AND delete_flg = 0';
+                $data = array(':id' => $_SESSION['user_id']);
 
                 $stmt = queryPost($dbh, $sql, $data);
                 $result = $stmt->fetch(PDO::FETCH_ASSOC);

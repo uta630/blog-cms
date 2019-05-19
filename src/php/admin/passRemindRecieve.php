@@ -43,8 +43,8 @@ if(!empty($_POST)){
                 try {
                     // pass書き換え(update)
                     $dbh = dbConnect();
-                    $sql = 'UPDATE users SET pass = :pass WHERE email = :email AND delete_flg = 0';
-                    $data = array(':email' => $_SESSION['auth_email'], ':pass' => password_hash($changePassCode, PASSWORD_DEFAULT));
+                    $sql = 'UPDATE users SET pass = :pass WHERE id = :id AND delete_flg = 0';
+                    $data = array(':id' => $_SESSION['user_id'], ':pass' => password_hash($changePassCode, PASSWORD_DEFAULT));
                     $stmt = queryPost($dbh, $sql, $data);
 
                     // 内容をメール送信
