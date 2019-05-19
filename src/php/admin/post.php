@@ -213,7 +213,11 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             <div class="c-form__btnArea">
                 <input type="submit" value="投稿する" class="c-form__submit c-btn c-btn--blue">
 
-                <a href="/admin/postList.php" class="c-form__btn c-btn">戻る</a>
+                <?php if($edit_flg) { ?>
+                <a href="/admin/postList.php" class="c-form__btn c-btn">投稿一覧へ戻る</a>
+                <?php } else { ?>
+                <a href="/admin/mypage.php" class="c-form__btn c-btn">マイページへ戻る</a>
+                <?php } ?>
             </div>
         </form>
     </div>
