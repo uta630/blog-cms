@@ -53,6 +53,7 @@ define('ERR_MSG_PASS', 'パスワードが一致しません');
 define('ERR_MSG_HARF_FORMAT', '半角英数字のみご利用いただけます');
 define('ERR_MSG_MINLEN', '6文字以上で入力してください');
 define('ERR_MSG_MAXLEN', '256文字以内で入力してください');
+define('ERR_MSG_LEN', '文字数が正しくありません');
 define('ERR_MSG_EMAIL', 'メールの形式が違います');
 define('ERR_MSG_ACCOUNT', '入力情報に誤りがあります');
 
@@ -63,6 +64,8 @@ define('ERR_MSG_PASS_DIFF', 'パスワードが違います');
 define('ERR_MSG_SELECT', '正しくありません');
 
 define('ERR_MSG_SEARCH','検索結果がありませんでした。');
+define('ERR_MSG_AUTH_KEY','認証が正しくありません');
+define('ERR_MSG_AUTH_LIMIT','認証の有効期限が切れています');
 define('ERR_MSG','エラーが発生しました。しばらく経ってからやり直してください。');
 
 $err_msg = array();
@@ -95,6 +98,12 @@ function validMaxLength($value, $key, $max = 256){
     if(mb_strlen($value) > $max){
         global $err_msg;
         $err_msg[$key] = ERR_MSG_MAXLEN;
+    }
+}
+function validLength($value, $key, $length = 8){
+    if(mb_strlen($value) !== $length){
+        global $err_msg;
+        $err_msg[$key] = ERR_MSG_LEN;
     }
 }
 function validHarf($value, $key){
@@ -160,6 +169,15 @@ function queryPost($dbh, $sql, $data){
     $stmt = $dbh->prepare($sql);
     $stmt->execute($data);
     return $stmt;
+}
+
+function makeRandKey($length = 8) {
+    $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJLKMNOPQRSTUVWXYZ0123456789';
+    $str = '';
+    for($i = 0; $i < $length; $i++){
+        $str .= $chars[mt_rand(0, mb_strlen($chars)-1)];
+    }
+    return $str;
 }
 
 /* メール送信 */
