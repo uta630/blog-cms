@@ -6,8 +6,8 @@
     </div>
 
     <div class="c-sidebar__section">
-        <form method="get" class="c-search">
-            <input type="text" placeholder="search..." class="c-search__input">
+        <form method="get" class="c-search" action="/">
+            <input type="text" placeholder="search..." name="search" class="c-search__input" value="<?php if(!empty($search)) echo $search ; ?>">
             <input type="submit" value="検索" class="c-search__submit">
         </form>
     </div>

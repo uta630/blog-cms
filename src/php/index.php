@@ -5,6 +5,9 @@ debug('「　TOPページ');
 debug('「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「');
 debugLogStart();
 
+/* テキスト検索 */
+$search = (!empty($_GET['search'])) ? $_GET['search'] : '' ;
+
 /* ページャー */
 $currentPageNum = (!empty($_GET['p'])) ? $_GET['p'] : 1 ;
 if(!is_numeric($currentPageNum)){
@@ -15,11 +18,11 @@ $listSpan = 6;
 $currentMinNum = (($currentPageNum - 1) * $listSpan);
 /* 記事 */
 $categoryType = (!empty($_GET['cat'])) ? $_GET['cat'] : '' ;
-$dbPostData = getPublishPostList($currentMinNum, $listSpan, $categoryType);
+$dbPostData = getPublishPostList($currentMinNum, $listSpan, $categoryType, $search);
 /* カテゴリ */
 $dbCategory = getCategory();
 /* デバッグ */
-if(empty($dbPostData['data'])){
+if(empty($dbPostData['data']) && $dbPostData['noindex'] == false){
     error_log('エラー発生:データがありませんでした。');
     header('Location:index.php');
 }
@@ -27,11 +30,17 @@ if(empty($dbPostData['data'])){
 <?php include('./common/head.php'); ?>
 
 <div class="c-hero">
-    <h1 class="c-hero__title">SITE TITLE</h1>
+    <h1 class="c-hero__title"><a href="/" class="c-hero__link">SITE TITLE</a></h1>
 </div>
 
 <div class="c-main">
     <div class="c-primary">
+        <?php if($dbPostData['noindex']){ ?>
+        <p class="c-post--alert">
+            <?php echo ERR_MSG_SEARCH ; ?>
+            <a href="/">TOPへ</a>戻る。
+        </p>
+        <?php } ?>
         <?php
             foreach($dbPostData['data'] as $key => $val):
         ?>

@@ -4,6 +4,16 @@
     &__title {
         text-align: center;
     }
+
+    &__link {
+        color: $dark-gray;
+        text-decoration: none;
+
+        &:hover {
+            opacity: .8;
+            transition: .2s;
+        }
+    }
 }
 
 .c-main {
