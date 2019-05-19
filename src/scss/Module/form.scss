@@ -57,6 +57,8 @@
     &__images {
         display: flex;
         justify-content: space-between;
+
+        padding-bottom: 24px;
     }
 
     &__release {
@@ -91,7 +93,7 @@
 
             overflow: hidden;
 
-            height: calc(100% - 24px);
+            height: 100%;
 
             border-radius: 3px;
             border: 1px solid $gray;
@@ -130,6 +132,8 @@
         }
 
         &--remove {
+            display: block;
+            
             background: $dark-gray;
 
             width: 100%;
