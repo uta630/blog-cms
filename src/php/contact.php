@@ -5,6 +5,9 @@ debug('「　お問い合わせページ　');
 debug('「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「');
 debugLogStart();
 
+$dbCategory = getCategory();
+debug('カテゴリデータ:'.print_r($dbCategory, true));
+
 if(!empty($_POST)){
     debug('POST送信があります。');
     debug('POST情報：'.print_r($_POST,true));
@@ -75,18 +78,19 @@ E-mail uta@uta.com
 ////////////////////////////////////////
 EOF;
                 sendMail($check_from, $check_to, $check_subject, $check_comment);
-
-                debug('お問い合わせの処理を完了。');
+                
                 if(empty($err_msg)){
                     $_POST['name'] = '';
                     $_POST['email'] = '';
                     $_POST['subject'] = '';
                     $_POST['comment'] = '';
-                    $err_msg['common'] = 'お問い合わせを受け付けました。';
+
+                    $suc_msg['common'] = 'お問い合わせを受け付けました。';
+                    debug('お問い合わせの処理を完了。');
                 }
             } catch(Exceprion $e) {
                 error_log('エラー発生:'.$e->getMessage());
-                $suc_msg['common'] = ERR_MSG;
+                $err_msg['common'] = ERR_MSG;
             }
         }
     }
@@ -136,7 +140,11 @@ EOF;
                 <textarea name="comment" id="comment" class="c-contact__input c-contact__textarea c-input"><?php if(!empty($_POST['comment'])) echo $_POST['comment'] ; ?></textarea>
             </label>
 
-            <input type="submit" value="送信" class="c-contact__submit c-btn c-btn--blue">
+            <div class="c-form__btnArea">
+                <input type="submit" value="送信" class="c-contact__submit c-btn c-btn--blue">
+
+                <a href="/" class="c-form__btn c-btn">戻る</a>
+            </div>
         </form>
     </div>
 
