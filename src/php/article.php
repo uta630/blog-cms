@@ -32,7 +32,7 @@ if(empty($p_id )){
             </div>
 
             <div class="c-post__contents">
-                <?php if((!empty($dbFormData['pic1'])) || (!empty($dbFormData['pic2'])) || (!empty($dbFormData['pic2']))){ ?>
+                <?php if((!empty($dbFormData['pic1'])) || (!empty($dbFormData['pic2'])) || (!empty($dbFormData['pic3']))){ ?>
                 <div class="c-post__images">
                     <div class="js-bxslider">
                         <?php if(!empty($dbFormData['pic1'])){ ?><img src="/admin/<?php echo $dbFormData['pic1']; ?>" alt="" class="c-post__thumb"><?php } ?>
