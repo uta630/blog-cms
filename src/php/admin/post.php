@@ -38,13 +38,12 @@ if(!empty($_POST)){
     $pic1 = ( !empty($_FILES['pic1']['name']) ) ? uploadImg($_FILES['pic1'], 'pic1') : '' ;
     $pic2 = ( !empty($_FILES['pic2']['name']) ) ? uploadImg($_FILES['pic2'], 'pic2') : '' ;
     $pic3 = ( !empty($_FILES['pic3']['name']) ) ? uploadImg($_FILES['pic3'], 'pic3') : '' ;
-    debug('$pic1:'.$pic1);
-    
-    // 画像登録していないがすでに登録されている場合にDBのパスを入れておく
-    $pic1 = ( empty($pic1) && !empty($dbFormData['pic1']) ) ? $dbFormData['pic1'] : $pic1 ;
-    $pic2 = ( empty($pic2) && !empty($dbFormData['pic2']) ) ? $dbFormData['pic2'] : $pic2 ;
-    $pic3 = ( empty($pic3) && !empty($dbFormData['pic3']) ) ? $dbFormData['pic3'] : $pic3 ;
-    debug('$pic1:'.$pic1);
+    if($edit_flg){
+         // DBに情報がある場合
+        $pic1 = $_POST['pic1_delete'] ? '' : ( empty($pic1) && !empty($dbFormData['pic1']) ) ? $dbFormData['pic1'] : $pic1 ;
+        $pic2 = $_POST['pic2_delete'] ? '' : ( empty($pic2) && !empty($dbFormData['pic2']) ) ? $dbFormData['pic2'] : $pic2 ;
+        $pic3 = $_POST['pic3_delete'] ? '' : ( empty($pic3) && !empty($dbFormData['pic3']) ) ? $dbFormData['pic3'] : $pic3 ;
+    }
     
     if(empty($dbFormData)){
         // 投稿バリデーション
@@ -189,7 +188,7 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                             <input type="file" name="pic1" class="c-form__thumb js-post-image">
                             <img src="<?php echo getFormData('pic1'); ?>" class="c-form__thumb--prev">
                         </label>
-                        <div class="c-form__thumb--remove js-thumb-remove">削除</div>
+                        <?php if($edit_flg) { ?><label for="pic1_delete" class="c-form__thumb--remove js-thumb-remove"><input type="radio" name="pic1_delete" id="pic1_delete">削除</label><?php } ?>
                     </div>
                     <div class="c-form__image">
                         <label class="c-form__thumb-wrap">
@@ -197,7 +196,7 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                             <input type="file" name="pic2" class="c-form__thumb js-post-image">
                             <img src="<?php echo getFormData('pic2'); ?>" class="c-form__thumb--prev">
                         </label>
-                        <div class="c-form__thumb--remove js-thumb-remove">削除</div>
+                        <?php if($edit_flg) { ?><label for="pic2_delete" class="c-form__thumb--remove js-thumb-remove"><input type="radio" name="pic2_delete" id="pic2_delete">削除</label><?php } ?>
                     </div>
                     <div class="c-form__image">
                         <label class="c-form__thumb-wrap">
@@ -205,7 +204,7 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                             <input type="file" name="pic3" class="c-form__thumb js-post-image">
                             <img src="<?php echo getFormData('pic3'); ?>" class="c-form__thumb--prev">
                         </label>
-                        <div class="c-form__thumb--remove js-thumb-remove">削除</div>
+                        <?php if($edit_flg) { ?><label for="pic3_delete" class="c-form__thumb--remove js-thumb-remove"><input type="radio" name="pic3_delete" id="pic3_delete">削除</label><?php } ?>
                     </div>
                 </div>
             </div>

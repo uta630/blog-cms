@@ -130,6 +130,8 @@
         }
 
         &--remove {
+            display: block;
+            
             background: $dark-gray;
 
             width: 100%;
