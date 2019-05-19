@@ -62,6 +62,7 @@ define('ERR_MSG_NAME_DIFF', '名前が違います。');
 define('ERR_MSG_PASS_DIFF', 'パスワードが違います');
 define('ERR_MSG_SELECT', '正しくありません');
 
+define('ERR_MSG_SEARCH','検索結果がありませんでした。');
 define('ERR_MSG','エラーが発生しました。しばらく経ってからやり直してください。');
 
 $err_msg = array();
@@ -251,7 +252,7 @@ function getPublishPostList($currentMinNum = 1, $span = 20, $category = '', $sea
         $stmt = queryPost($dbh, $sql, $data);
         $result['total'] = $stmt->rowCount();
         $result['total_page'] = ceil($result['total'] / $span);
-
+        $result['noindex'] = $result['total'] === 0 ? true : false ;
         if(!$stmt){
             return false;
         }

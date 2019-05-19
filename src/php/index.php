@@ -22,7 +22,7 @@ $dbPostData = getPublishPostList($currentMinNum, $listSpan, $categoryType, $sear
 /* カテゴリ */
 $dbCategory = getCategory();
 /* デバッグ */
-if(empty($dbPostData['data'])){
+if(empty($dbPostData['data']) && $dbPostData['noindex'] == false){
     error_log('エラー発生:データがありませんでした。');
     header('Location:index.php');
 }
@@ -35,6 +35,12 @@ if(empty($dbPostData['data'])){
 
 <div class="c-main">
     <div class="c-primary">
+        <?php if($dbPostData['noindex']){ ?>
+        <p class="c-post--alert">
+            <?php echo ERR_MSG_SEARCH ; ?>
+            <a href="/">TOPへ</a>戻る。
+        </p>
+        <?php } ?>
         <?php
             foreach($dbPostData['data'] as $key => $val):
         ?>
