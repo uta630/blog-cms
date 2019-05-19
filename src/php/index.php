@@ -5,6 +5,9 @@ debug('「　TOPページ');
 debug('「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「');
 debugLogStart();
 
+/* テキスト検索 */
+$search = (!empty($_GET['search'])) ? $_GET['search'] : '' ;
+
 /* ページャー */
 $currentPageNum = (!empty($_GET['p'])) ? $_GET['p'] : 1 ;
 if(!is_numeric($currentPageNum)){
@@ -15,7 +18,7 @@ $listSpan = 6;
 $currentMinNum = (($currentPageNum - 1) * $listSpan);
 /* 記事 */
 $categoryType = (!empty($_GET['cat'])) ? $_GET['cat'] : '' ;
-$dbPostData = getPublishPostList($currentMinNum, $listSpan, $categoryType);
+$dbPostData = getPublishPostList($currentMinNum, $listSpan, $categoryType, $search);
 /* カテゴリ */
 $dbCategory = getCategory();
 /* デバッグ */

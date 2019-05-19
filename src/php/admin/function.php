@@ -232,40 +232,43 @@ function getPostList($currentMinNum = 1, $span = 20){
 }
 
 /* 投稿全体の公開記事だけ情報取得 */
-function getPublishPostList($currentMinNum = 1, $span = 20, $category = ''){
+function getPublishPostList($currentMinNum = 1, $span = 20, $category = '', $search = ''){
     debug('投稿全体の情報を取得します。');
     
     try {
         // DBの記事idを取得する
         $dbh = dbConnect();
-        if(empty($category)){
-            $sql = 'SELECT id FROM post WHERE status = :status AND type = :type';
-            $data = array(':status' => 'publish', ':type' => 'post');
-        } else {
-            $sql = 'SELECT id FROM post WHERE status = :status AND type = :type AND category = :category';
-            $data = array(':status' => 'publish', ':type' => 'post', 'category' => $category);
+        $sql = 'SELECT id FROM post WHERE status = :status AND type = :type';
+        $data = array(':status' => 'publish', ':type' => 'post');
+        if(!empty($category)){
+            $sql = $sql.' AND category = :category';
+            $data = array_merge($data, array(':category' => $category));
+        } else if(!empty($search)){
+            $sql = $sql.' AND title LIKE "%'.$search.'%"';
         }
+        debug('SQL:'.$sql);
 
         $stmt = queryPost($dbh, $sql, $data);
-        
         $result['total'] = $stmt->rowCount();
         $result['total_page'] = ceil($result['total'] / $span);
+
         if(!$stmt){
             return false;
         }
 
         // 取得したidから表示したい分だけ拾って出力する
-        if(empty($category)){
-            $sql = 'SELECT * FROM post WHERE status = :status AND type = :type';
-            $data = array(':status' => 'publish', ':type' => 'post');
-        } else {
-            $sql = 'SELECT * FROM post WHERE status = :status AND type = :type AND category = :category';
-            $data = array(':status' => 'publish', ':type' => 'post', 'category' => $category);
+        $sql = 'SELECT * FROM post WHERE status = :status AND type = :type';
+        $data = array(':status' => 'publish', ':type' => 'post');
+        if(!empty($category)){
+            $sql = $sql.' AND category = :category';
+            $data = array_merge($data, array(':category' => $category));
+        } else if(!empty($search)){
+            $sql = $sql.' AND title LIKE "%'.$search.'%"';
         }
         $sql .= ' LIMIT '.$span.' OFFSET '.$currentMinNum;
-        debug('SQL：'.$sql);
         $stmt = queryPost($dbh, $sql, $data);
-
+        debug('SQL:'.$sql);
+        
         if($stmt){
             $result['data'] = $stmt->fetchAll();
             return $result;
