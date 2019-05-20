@@ -18,7 +18,7 @@ debug('カテゴリデータ:'.print_r($dbCategoryData, true));
 
 // パラメータ改ざんチェック
 if(!empty($p_id) && empty($dbFormData)){
-    debug('GETパラメータの商品IDが違います。');
+    debug('GETパラメータの商品IDまたは投稿したユーザーIDが異なります。');
     debug('マイページへ遷移します。');
     header('Location:mypage.php');
 }

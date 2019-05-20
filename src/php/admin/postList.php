@@ -32,7 +32,7 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         <?php pagination($currentPageNum, $dbPostData['total_page']); ?>
 
         <?php if(!empty($_SESSION['msg_success'])){ ?>
-            <p><?php echo $_SESSION['msg_success']; ?></p>
+            <p class="c-catalog--alert"><?php echo $_SESSION['msg_success']; ?></p>
         <?php 
                 $_SESSION['msg_success'] = '' ;
             }
