@@ -3,6 +3,10 @@
 
     border: 1px solid $dark-gray;
 
+    &--alert {
+        color: $light-blue;
+    }
+
     &__link {
         @include txt-ellipsis;
 
